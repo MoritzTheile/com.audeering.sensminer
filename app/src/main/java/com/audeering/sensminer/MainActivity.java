@@ -1,32 +1,169 @@
 package com.audeering.sensminer;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.audeering.sensminer.model.configuration.Configuration;
+import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
+
+public class MainActivity extends AppCompatActivity implements OnStatusChangedListener {
+
+    private static final int REQUEST_PERMISSIONS = 1;
+    private static final String TAG = MainActivity.class.getName();
+    private Configuration configuration;
+    private SensMinerService mService;
+    private TextView startStopButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        configuration = ConfigurationCRUDService.instance().fetchList(null, null).iterator().next();
+        setupGui();
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        askForPermissions();
+        Intent serviceIntent = new Intent(this, SensMinerService.class);
+        bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void setupGui() {
+        setupRecordDurationSpinner();
+        findViewById(R.id.situationDelete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                deleteCurrentSituation();
+            }
+        });
+        startStopButton = (TextView) findViewById(R.id.startStopButton);
+        startStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isServiceRunning)
+                    stopRecording();
+                else
+                    startRecording();
+            }
+        });
+
+    }
+
+    private void stopRecording() {
+        Intent serviceIntent = new Intent(this, SensMinerService.class);
+        serviceIntent.setAction(Intent.ACTION_DELETE);
+        startService(serviceIntent);
+    }
+
+    private boolean isServiceRunning;
+    private boolean mBound;
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            SensMinerService.LocalBinder binder = (SensMinerService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            binder.addStatusChangedListener(MainActivity.this);
+            isServiceRunning = binder.getIsRunning();
+            statusChanged(isServiceRunning);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    private void startRecording() {
+        Intent serviceIntent = new Intent(this, SensMinerService.class);
+        serviceIntent.setAction(Intent.ACTION_RUN);
+        startService(serviceIntent);
+    }
+
+    private void setupRecordDurationSpinner() {
+        Spinner spinner = (Spinner) findViewById(R.id.recordDurationSpinner);
+        final String[] durations = new String[configuration.getRecordDurations().size()];
+        configuration.getRecordDurations().keySet().toArray(durations);
+        String current = configuration.getRecordDuration();
+        int selectedIndex = -1;
+        for (int i = 0; i < durations.length; i++) {
+            if(durations[i].equals(current)) {
+                selectedIndex = i;
+                break;
+            }
+        }
+        spinner.setAdapter(new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, durations));
+        spinner.setSelection(selectedIndex);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Toast.makeText(MainActivity.this, "Item " + durations[i] + " clicked", Toast.LENGTH_LONG).show();
+                configuration.setRecordDuration(durations[i]);
+                ConfigurationCRUDService.instance().update(configuration);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
+
+    private void deleteCurrentSituation() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Delete")
+                .setMessage("Do you really want to delete this  Situation")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        deleteExecute();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
+    private void deleteExecute() {
+        Toast.makeText(MainActivity.this, "deleted...", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,13 +177,49 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.action_records:
+                Toast.makeText(MainActivity.this, "action_records...", Toast.LENGTH_SHORT).show();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void statusChanged(boolean running) {
+        isServiceRunning = running;
+        startStopButton.setText(getString(running ? R.string.stop_recording : R.string.start_recording));
+    }
+
+    private void askForPermissions() {
+        List<String> requiredPermissions = new ArrayList<>();
+        String[] allPermissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION};
+        for (String permission : allPermissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(this, permission);
+            if(permissionCheck != PERMISSION_GRANTED)
+                requiredPermissions.add(permission);
+        }
+        if(requiredPermissions.size() == 0)
+            return;
+        String[] permissions = new String[requiredPermissions.size()];
+        ActivityCompat.requestPermissions(this, requiredPermissions.toArray(permissions), REQUEST_PERMISSIONS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                Toast.makeText(this, "RESULT CODE is "+ grantResults.length + (grantResults.length > 0 ? grantResults[0] : ""), Toast.LENGTH_LONG).show();
     }
 }
