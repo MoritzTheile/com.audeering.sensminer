@@ -68,7 +68,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         situation.setMobileStorage("On Surface");
         return situation;
     }
-    
+
     private Situation createDefault2() {
         Situation situation = new Situation();
         situation.setName("Lunch");
