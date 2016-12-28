@@ -16,22 +16,23 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
      */
     @Override
     public DTOFetchList<Configuration> fetchList(Page page, FetchQuery query) {
-
-        DTOFetchList<Configuration> result = loadFromFile();
-        if (result.size() == 0) {
-            Configuration configuration = getDefault();
-            saveToFile(configuration);
-            result.add(configuration);
-        }
-
+        DTOFetchList<Configuration> result = new DTOFetchList<>();
+        result.add(get(null));
         return result;
     }
 
 
     @Override
     public Configuration get(String dtoId) {
-        // not needed because there is only one Configuration
-        throw new RuntimeException("not implemented");
+        // id is ignored because there will always be only one configuration
+        Configuration configuration = loadFromFile();
+        if (configuration == null) {
+            configuration = getDefault();
+            saveToFile(configuration);
+
+        }
+        return configuration;
+
 
     }
 
@@ -104,10 +105,9 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
 
 
 
-    private DTOFetchList<Configuration> loadFromFile() {
-        DTOFetchList<Configuration> result = new DTOFetchList<>();
-        //TODO
-        return result;
+    private Configuration loadFromFile() {
+        // TODO
+         return null;
     }
 
     private void saveToFile(Configuration configuration) {

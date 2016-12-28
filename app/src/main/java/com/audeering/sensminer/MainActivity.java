@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
 
     private static final int REQUEST_PERMISSIONS = 1;
     private static final String TAG = MainActivity.class.getName();
-    private Configuration configuration;
     private SensMinerService mService;
     private TextView startStopButton;
     @Override
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        configuration = ConfigurationCRUDService.instance().fetchList(null, null).iterator().next();
+        
         setupGui();
     }
 
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
 
     private boolean isServiceRunning;
     private boolean mBound;
+
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         public void onServiceDisconnected(ComponentName arg0) {
             mBound = false;
         }
+
     };
 
     private void startRecording() {
@@ -113,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
     }
 
     private void setupRecordDurationSpinner() {
+
+        Configuration configuration = ConfigurationCRUDService.instance().fetchList(null, null).iterator().next();
+
         Spinner spinner = (Spinner) findViewById(R.id.recordDurationSpinner);
         final String[] durations = new String[configuration.getRecordDurations().size()];
         configuration.getRecordDurations().keySet().toArray(durations);
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 //                Toast.makeText(MainActivity.this, "Item " + durations[i] + " clicked", Toast.LENGTH_LONG).show();
+                Configuration configuration = ConfigurationCRUDService.instance().get(null);
                 configuration.setRecordDuration(durations[i]);
                 ConfigurationCRUDService.instance().update(configuration);
             }
