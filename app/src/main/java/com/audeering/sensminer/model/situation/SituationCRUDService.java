@@ -102,10 +102,10 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
             // String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(indexedSituation.values());
 
-            //  System.out.println(jsonInString);
             File file = FileUtils.createNewSituationsFile();
 
-            mapper.writeValue(file, indexedSituation.values());
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, indexedSituation.values());
+
             System.out.println("asdf printing file: ");
             FileUtils.printFileToConsole(file);
         } catch (Exception e){

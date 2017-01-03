@@ -32,7 +32,10 @@ public class FileUtils {
 
         String path =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/conf/situations.json";
 
+
         File file = new File(path);
+        System.out.println("AbsolutePath to conf file: " +  file.getAbsolutePath() );
+
 
         if(!file.exists()){
             file.createNewFile();

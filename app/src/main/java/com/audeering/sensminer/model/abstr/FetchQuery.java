@@ -10,6 +10,13 @@ public class FetchQuery implements Serializable {
 		ASC, DESC, NONE
 	}
 
+	/*
+	 * The promise is, that the fingerprint changes if the query changes.
+	 */
+	public String getFingerprint() {
+		return sortDirection.name() + "____" + searchString + "____" + orderByColumn;
+	}
+
 	private SORTDIRECTION sortDirection = SORTDIRECTION.NONE;
 
 	private String searchString;

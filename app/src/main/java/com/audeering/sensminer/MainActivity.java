@@ -15,17 +15,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
+import com.audeering.sensminer.model.situation.view.SituationBoxView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         setSupportActionBar(toolbar);
         
         setupGui();
+
+
     }
 
     @Override
@@ -57,13 +62,9 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
     }
 
     private void setupGui() {
+
         setupRecordDurationSpinner();
-        findViewById(R.id.situationDelete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteCurrentSituation();
-            }
-        });
+
         startStopButton = (TextView) findViewById(R.id.startStopButton);
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +75,21 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
                     startRecording();
             }
         });
+
+        setupSituationBox();
+
+
+
+
+
+    }
+
+    private void setupSituationBox(){
+        //playing around - delete me later:
+
+        final FrameLayout situationBoxSlot = (FrameLayout) findViewById(R.id.situationBoxSlot);
+        SituationBoxView situationBoxView = (SituationBoxView) LayoutInflater.from(this).inflate(R.layout.situation_box_view, null);
+        situationBoxSlot.addView(situationBoxView);
 
     }
 
@@ -146,28 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         });
     }
 
-    private void deleteCurrentSituation() {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Delete")
-                .setMessage("Do you really want to delete this  Situation")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        deleteExecute();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                }).show();
-    }
 
-    private void deleteExecute() {
-        Toast.makeText(MainActivity.this, "deleted...", Toast.LENGTH_SHORT).show();
-    }
 
 
     @Override
