@@ -115,21 +115,18 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
     }
 
     private Map<String, Situation> loadFromFile() {
-        System.out.println("asdff trying to load from file");
 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
             File file = FileUtils.getSituationsFile();
-            System.out.println("asdf the file: " + file.getPath() + "/" + file.getName());
             List<Situation> situations = mapper.readValue(file , mapper.getTypeFactory().constructCollectionType(List.class, Situation.class));
-            System.out.println("asdf situations.size() = " + situations.size());
             FileUtils.printFileToConsole(file);
 
             return indexList(situations);
 
         }catch(Exception e ) {
-            System.out.println("asdf Exception: " + e.getMessage() );
+            System.out.println("Exception: " + e.getMessage() );
             e.printStackTrace();
 
         }

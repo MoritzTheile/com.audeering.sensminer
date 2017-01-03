@@ -45,6 +45,32 @@ public class FileUtils {
 
     }
 
+    public static File createNewConfigurationFile() throws Exception{
+
+        File file = getSituationsFile();
+        if(file.exists()){
+            file.delete();
+        }
+        new File(file.getParent()).mkdirs();
+        file.createNewFile();
+        return file;
+    }
+
+    public static File getConfigurationFile() throws Exception{
+
+        String path =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/conf/configuration.json";
+
+        File file = new File(path);
+
+        if(!file.exists()){
+            file.createNewFile();
+        }
+
+        return file;
+
+    }
+
+
     public static void printFileToConsole(File file){
         BufferedReader in = null;
         try {

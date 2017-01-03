@@ -4,14 +4,18 @@ import com.audeering.sensminer.model.abstr.AbstrDTO;
 import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.trackconf.AccelerationTrackConf;
 import com.audeering.sensminer.model.trackconf.AudioTrackConf;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Configuration extends AbstrDTO{
-	
+
 	/**
 	 * Diese Enumeration benennt alle dem System bekannten Tracktypen.
 	 * Wird ein neuer Track in die App aufgenommen muss der entsprechende Typ hier ergänzt werden.
@@ -23,38 +27,34 @@ public class Configuration extends AbstrDTO{
 	 * Die vom Benutzer aktuell gewahlte Situation.
 	 */
 	private Situation selectedSituation;
-	
+
 
 	/**
 	 * Diese Werte können als Auxiliary gewahlt werden.
 	 */
 	private List<String> situationAuxiliaryValues = new ArrayList<>();
-	
+
 	/**
 	 * Diese Werte können als Activity gew?hlt werden.
 	 */
 	private List<String> situationActivityValues = new ArrayList<>();
-	
+
 	/**
 	 * Diese Werte können als Environment gew?hlt werden.
 	 */
 	private List<String> situationEnvironmentValues = new ArrayList<>();
-	
+
 	/**
 	 * Diese Werte k?nnen als MobileStorage gew?hlt werden.
 	 */
 	private List<String> situationMobileStorageValues = new ArrayList<>();
-	
-	private Map<String, Integer> recordDurationsString2Seconds = new HashMap<>();
-	
 
+	private Map<String, Integer> recordDurationsString2Seconds = new LinkedHashMap<>();
 
-
-	
 	private AudioTrackConf audioTrackConf = new AudioTrackConf();
 	private AccelerationTrackConf accelerationTrackConf = new AccelerationTrackConf();
 
-	
+
 	public Situation getSelectedSituation() {
 		return selectedSituation;
 	}

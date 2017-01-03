@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
+import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.situation.view.SituationBoxView;
 
 import java.util.ArrayList;
@@ -76,20 +77,11 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
             }
         });
 
-        setupSituationBox();
-
-
-
-
-
-    }
-
-    private void setupSituationBox(){
-        //playing around - delete me later:
 
         final FrameLayout situationBoxSlot = (FrameLayout) findViewById(R.id.situationBoxSlot);
         SituationBoxView situationBoxView = (SituationBoxView) LayoutInflater.from(this).inflate(R.layout.situation_box_view, null);
         situationBoxSlot.addView(situationBoxView);
+        situationBoxView.render();
 
     }
 
@@ -162,10 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         });
     }
 
-
-
-
-    @Override
+   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);

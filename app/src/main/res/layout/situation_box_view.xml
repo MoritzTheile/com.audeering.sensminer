@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical">
+
         <Spinner android:id="@+id/situationSpinner"
             android:layout_width="0px"
             android:layout_weight="1"
@@ -29,80 +30,12 @@
             android:scaleType="center"
             android:src="@drawable/ic_delete_24dp"/>
     </LinearLayout>
-    <!--  SITUATION DETAILS  -->
-    <LinearLayout
-        android:paddingTop="16dp"
-        android:paddingStart="@dimen/situationIdent"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            style="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/activity"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/activitySpinner"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout android:paddingTop="16dp"
-        android:paddingStart="@dimen/situationIdent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            style="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/phone_position"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/positionSpinner"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout android:paddingTop="16dp"
-        android:paddingStart="@dimen/situationIdent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            style="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/environment"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/environmentSpinner"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout android:paddingTop="16dp"
-        android:paddingStart="@dimen/situationIdent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            style="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/auxiliary"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/auxiliarySpinner"
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <ImageView android:layout_marginTop="16dp"
-        android:layout_gravity="end"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_add_circle_32dp"/>
+        android:layout_height="match_parent"
+        android:id="@+id/situationFormSlot">
+
+    </FrameLayout>
+
 </com.audeering.sensminer.model.situation.view.SituationBoxView>

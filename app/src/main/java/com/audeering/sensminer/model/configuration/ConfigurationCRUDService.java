@@ -4,6 +4,13 @@ import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
+import com.audeering.sensminer.model.situation.Situation;
+import com.audeering.sensminer.sensors.FileUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MoritzTheile on 05.12.2016.
@@ -105,13 +112,45 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
 
 
 
-    private Configuration loadFromFile() {
-        // TODO
-         return null;
-    }
 
     private void saveToFile(Configuration configuration) {
-        //TODO
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(indexedSituation.values());
+
+            File file = FileUtils.createNewSituationsFile();
+
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, configuration);
+
+            System.out.println("asdf printing file: ");
+            FileUtils.printFileToConsole(file);
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    private Configuration loadFromFile() {
+
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            File file = FileUtils.getSituationsFile();
+            Configuration configuration = mapper.readValue(file, Configuration.class);
+            FileUtils.printFileToConsole(file);
+
+            return configuration;
+
+        }catch(Exception e ) {
+
+            System.out.println("Exception: " + e.getMessage() );
+            e.printStackTrace();
+
+        }
+
+        return null;
     }
 
 
