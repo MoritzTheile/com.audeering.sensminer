@@ -5,7 +5,6 @@ import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.FileUtils;
-import com.audeering.sensminer.model.situation.FileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -25,7 +24,6 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
         result.add(get(null));
         return result;
     }
-
 
     @Override
     public Configuration get(String dtoId) {
@@ -115,14 +113,11 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            // String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(indexedSituation.values());
-
-            File file = FileService.createNewSituationsFile();
+            File file = FileService.createNewConfigurationFile();
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, configuration);
 
-            System.out.println("asdf printing file: ");
-            FileUtils.printFileToConsole(file);
+             FileUtils.printFileToConsole(file);
         } catch (Exception e){
 
             e.printStackTrace();
@@ -134,7 +129,7 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
         try {
 
             ObjectMapper mapper = new ObjectMapper();
-            File file = FileService.getExistingSituationsFile();
+            File file = FileService.getExistingConfigurationFile();
             Configuration configuration = mapper.readValue(file, Configuration.class);
             FileUtils.printFileToConsole(file);
 

@@ -17,6 +17,13 @@ public class FileUtils {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/SensMiner";
     }
 
+    public static File getDataDir(){
+        File dataDir = new File(FileUtils.getHomeDirPath() +"/data");
+        dataDir.mkdirs();
+        return dataDir;
+    }
+
+
     public static void printFileToConsole(File file){
         BufferedReader in = null;
         try {

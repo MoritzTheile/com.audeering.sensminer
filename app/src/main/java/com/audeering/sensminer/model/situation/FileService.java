@@ -9,6 +9,7 @@ import java.io.File;
  */
 
 public class FileService {
+
     public static File createNewSituationsFile() throws Exception{
 
         File file = getExistingSituationsFile();
@@ -24,10 +25,7 @@ public class FileService {
 
         String path =  FileUtils.getHomeDirPath()  + "/conf/situations.json";
 
-
         File file = new File(path);
-        System.out.println("AbsolutePath to conf file: " +  file.getAbsolutePath() );
-
 
         if(!file.exists()){
             new File(file.getParent()).mkdirs();
