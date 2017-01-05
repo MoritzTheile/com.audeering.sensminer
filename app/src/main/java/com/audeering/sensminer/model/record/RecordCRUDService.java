@@ -21,8 +21,7 @@ public class RecordCRUDService implements CRUDService<Record, FetchQuery> {
     }
 
     @Override
-    public Record update(Record dto) {
-        return null;
+    public void update(Record dto) {
     }
 
     @Override

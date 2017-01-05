@@ -4,7 +4,7 @@ import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
-import com.audeering.sensminer.sensors.FileUtils;
+import com.audeering.sensminer.model.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class SituationCRUDService implements CRUDService<Situation, FetchQuery> {
 
     public void deleteAll() throws Exception {
-        FileUtils.createNewSituationsFile();
+        FileService.createNewSituationsFile();
     }
 
     @Override
@@ -45,29 +45,18 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
     }
 
     @Override
-    public Situation update(Situation dto) {
-
-        System.out.println("asdfupdate updating dto " + dto.getId());
+    public void update(Situation dto) {
 
         Map<String, Situation> situationIndex = getSituationIndex();
 
-        System.out.println("asdfupdate ids =  "+ situationIndex.keySet());
-
         if(situationIndex.containsKey(dto.getId())){
 
-            System.out.println("asdfupdate replacing old dto with new dto");
             situationIndex.put(dto.getId(), dto);
 
-        }else{
-
-            System.out.println("asdfupdate nothung to update");
-
         }
-
         saveToFile(situationIndex);
 
-        return dto;
-    }
+  }
 
     @Override
     public Situation create(Situation dto) {
@@ -102,7 +91,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
             // String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(indexedSituation.values());
 
-            File file = FileUtils.createNewSituationsFile();
+            File file = FileService.createNewSituationsFile();
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, indexedSituation.values());
 
@@ -119,7 +108,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
-            File file = FileUtils.getSituationsFile();
+            File file = FileService.getExistingSituationsFile();
             List<Situation> situations = mapper.readValue(file , mapper.getTypeFactory().constructCollectionType(List.class, Situation.class));
             FileUtils.printFileToConsole(file);
 

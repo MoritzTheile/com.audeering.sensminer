@@ -1,8 +1,8 @@
-package com.audeering.sensminer.model.situation;
+package com.audeering.sensminer.model;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.audeering.sensminer.sensors.FileUtils;
+import com.audeering.sensminer.model.situation.FileService;
 
 import junit.framework.Assert;
 
@@ -29,7 +29,7 @@ public class FileUtilsTest {
     public void testGetSituationsFile() throws Exception {
 
         // getting the file
-        File file = FileUtils.getSituationsFile();
+        File file = FileService.getExistingSituationsFile();
         Assert.assertNotNull(file);
 
         Assert.assertEquals("", fileToString(file));
@@ -40,7 +40,7 @@ public class FileUtilsTest {
         out.close();
 
         // reloading the file
-        file = FileUtils.getSituationsFile();
+        file = FileService.getExistingSituationsFile();
 
         Assert.assertEquals(TESTSTRING, fileToString(file));
 
@@ -52,7 +52,7 @@ public class FileUtilsTest {
     public void testCreateNewSituationsFile() throws Exception {
 
         // getting the file
-        File file = FileUtils.createNewSituationsFile();
+        File file = FileService.createNewSituationsFile();
         Assert.assertNotNull(file);
 
         Assert.assertEquals("", fileToString(file));
@@ -63,7 +63,7 @@ public class FileUtilsTest {
         out.close();
 
         // creating a new file
-        file = FileUtils.createNewSituationsFile();
+        file = FileService.createNewSituationsFile();
 
         // the file should have been replaced with a new file:
         Assert.assertEquals("", fileToString(file));

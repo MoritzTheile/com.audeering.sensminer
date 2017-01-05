@@ -3,8 +3,9 @@ package com.audeering.sensminer.sensors;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.util.Log;
+
+import com.audeering.sensminer.model.record.FileService;
 
 import java.io.FileOutputStream;
 
@@ -25,7 +26,7 @@ public class AudioSensor {
     }
     public static void startRecording() {
         try {
-            String mFileName = FileUtils.getFileForService("audio");
+            String mFileName = FileService.getPathToFile("audio");
             final FileOutputStream fos = new FileOutputStream(mFileName);
             int bufSize = 8 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT);
             Log.i(TAG, "startRecording: bufsize = " + bufSize);

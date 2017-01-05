@@ -30,7 +30,7 @@ public interface CRUDService<D extends AbstrDTO, F extends FetchQuery> {
 	 * @param dto
 	 * 
 	 */
-	D update(
+	void update(
 			D dto
 	);
 
