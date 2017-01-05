@@ -7,7 +7,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.record.FileService;
+import com.audeering.sensminer.model.record.Record;
+import com.audeering.sensminer.model.record.RecordCRUDService;
 
 import java.io.FileOutputStream;
 
@@ -44,9 +47,9 @@ public class LocationSensor {
     private static FileOutputStream fos;
 
     @SuppressWarnings("MissingPermission")
-    public static void startRecording(Context context) {
+    public static void startRecording(Context context, Record record) {
         try {
-            String mFileName = FileService.getPathToFile("audio");
+            String mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.LOCATION)+"/location.csv";;
             fos = new FileOutputStream(mFileName);
 
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);

@@ -59,14 +59,9 @@ public class FileService {
 
     }
 
-    private static String getRecordDir(String recordId) {
+    protected static String getRecordDir(String recordId) {
         return FileUtils.getDataDir().getPath() + "/"+recordId+DIR_SUFFIX;
     }
-
-    public static String getPathToFile(String service) {
-        return FileUtils.getHomeDirPath() + "/audiorecordtest.wav";
-    }
-
 
     public static void deleteRecordDir(String recordId){
         File recordDir = new File(getRecordDir(recordId));

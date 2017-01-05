@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.audeering.sensminer.model.record.Record;
+import com.audeering.sensminer.model.record.RecordCRUDService;
 import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
@@ -21,6 +23,8 @@ public class SensMinerService extends Service {
     private final LocalBinder mBinder = new LocalBinder();
     private boolean isRunning;
 
+    private Record record;
+
     public SensMinerService() {
     }
 
@@ -30,12 +34,18 @@ public class SensMinerService extends Service {
         if(Intent.ACTION_RUN.equals(intent.getAction())) {
             startNotification();
             setIsRunning(true);
+            record = RecordCRUDService.instance().create(getNewRecord());
             startAudioService();
             startLocationService();
             return START_STICKY;
         } else if (Intent.ACTION_DELETE.equals(intent.getAction())) {
             stopAudioService();
             stopLocationService();
+            {
+                record.setEndTime(System.currentTimeMillis());
+                RecordCRUDService.instance().update(record);
+                record = null;
+            }
             setIsRunning(false);
             stopForeground(true);
             stopSelf();
@@ -44,12 +54,19 @@ public class SensMinerService extends Service {
         return START_NOT_STICKY;
     }
 
+    private Record getNewRecord() {
+        Record record = new Record();
+        record.setStartTime(System.currentTimeMillis());
+
+        return record;
+    }
+
     private void stopLocationService() {
         LocationSensor.stopRecording();
     }
 
     private void startLocationService() {
-        LocationSensor.startRecording(this);
+        LocationSensor.startRecording(this, record);
     }
 
     private void stopAudioService() {
@@ -57,7 +74,7 @@ public class SensMinerService extends Service {
     }
 
     private void startAudioService() {
-        AudioSensor.startRecording();
+        AudioSensor.startRecording(record);
     }
 
     private void setIsRunning(boolean b) {

@@ -5,7 +5,10 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.record.FileService;
+import com.audeering.sensminer.model.record.Record;
+import com.audeering.sensminer.model.record.RecordCRUDService;
 
 import java.io.FileOutputStream;
 
@@ -24,9 +27,9 @@ public class AudioSensor {
     public static void stopRecording() {
         running = false;
     }
-    public static void startRecording() {
+    public static void startRecording(Record record) {
         try {
-            String mFileName = FileService.getPathToFile("audio");
+            String mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.AUDIO)+"/audio.wav";
             final FileOutputStream fos = new FileOutputStream(mFileName);
             int bufSize = 8 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT);
             Log.i(TAG, "startRecording: bufsize = " + bufSize);

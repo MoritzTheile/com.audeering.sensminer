@@ -76,6 +76,14 @@ public class RecordCRUDService implements CRUDService<Record, FetchQuery> {
 
     }
 
+    public File getDataDir(Record record, Configuration.TRACKTYPE tracktype){
+        File dataDir = new File(FileService.getRecordDir(record.getId())+ "/track_"+tracktype.name().toLowerCase());
+        if(!dataDir.exists()){
+            dataDir.mkdirs();
+        }
+        return dataDir;
+    }
+
     private void saveToFile(Record record) {
 
         try {
