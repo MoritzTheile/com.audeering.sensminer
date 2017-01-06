@@ -60,7 +60,7 @@ public class SituationBoxView extends LinearLayout {
 
             Spinner spinner = (Spinner) findViewById(R.id.situationSpinner);
 
-           // spinner.removeAllViews();
+            // spinner.removeAllViews();
 
             final DTOFetchList<Situation> situations = SituationCRUDService.instance().fetchList(new Page(), new FetchQuery());
 
@@ -76,7 +76,7 @@ public class SituationBoxView extends LinearLayout {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                     Toast.makeText(getContext(), "Item " + situationArrayAdapter.getItem(i).getName() + " clicked", Toast.LENGTH_LONG).show();
-                    SituationCRUDService.instance().setLastSelectedSituation(situationArrayAdapter.getItem(i));
+                    SituationCRUDService.instance().setLastSelectedSituation(situationArrayAdapter.getItem(i).getId());
                     renderSituationForm();
                 }
 
@@ -134,19 +134,33 @@ public class SituationBoxView extends LinearLayout {
 
         newSituation = SituationCRUDService.instance().create(newSituation);
 
-        newSituation.setName("new Situation");
 
         newSituation.setMobileStorage(currentSituation.getMobileStorage());
         newSituation.setEnvironment(currentSituation.getEnvironment());
         newSituation.setAuxiliary(currentSituation.getAuxiliary());
         newSituation.setActivity(currentSituation.getActivity());
 
+        newSituation.setName(
+                firstLetters(newSituation.getActivity()) + "_" +
+                firstLetters(newSituation.getMobileStorage()) + "_" +
+                firstLetters(newSituation.getEnvironment()) + "_" +
+                firstLetters(newSituation.getAuxiliary())
+        );
+
         SituationCRUDService.instance().update(newSituation);
 
-        SituationCRUDService.instance().setLastSelectedSituation(newSituation);
+        SituationCRUDService.instance().setLastSelectedSituation(newSituation.getId());
 
         render();
     }
+
+    private String firstLetters(String string) {
+        if(string.length() < 4){
+            return string;
+        }
+        return string.substring(0,4).trim();
+    }
+
 
     private void deleteCurrentSituation() {
 

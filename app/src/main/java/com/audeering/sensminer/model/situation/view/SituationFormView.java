@@ -169,7 +169,7 @@ public class SituationFormView extends LinearLayout {
     }
     private void init(AttributeSet attrs, int defStyle) {
 
-        //TODO
+        // nothing to do?
 
     }
 

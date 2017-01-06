@@ -59,18 +59,29 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
         Collections.sort(fetchList);
 
-        return fetchList.get(0);
+        Situation situation = fetchList.get(0);
+
+        return situation;
 
     }
 
-    public void setLastSelectedSituation(Situation situation){
+    public void setLastSelectedSituation(String situationId){
+
+        Situation situation = get(situationId);
+
         situation.setLastUsageTimestamp(System.currentTimeMillis());
+
         update(situation);
+
     }
 
 
     @Override
     public void update(Situation dto) {
+
+        System.out.println("asdfff Updating situationDTO");
+        System.out.println("asdfff     name = " + dto.getName());
+        System.out.println("asdfff     environment = " + dto.getEnvironment());
 
         Map<String, Situation> situationIndex = getSituationIndex();
 
@@ -79,6 +90,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
             situationIndex.put(dto.getId(), dto);
 
         }
+
         saveToFile(situationIndex);
 
   }
@@ -104,24 +116,23 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
     @Override
     public void delete(String dtoId) {
+
         Map<String, Situation> situationIndex = getSituationIndex();
         situationIndex.remove(dtoId);
         saveToFile(situationIndex);
+
     }
 
     private void saveToFile(Map<String, Situation> indexedSituation) {
 
         try {
-            ObjectMapper mapper = new ObjectMapper();
 
-            // String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(indexedSituation.values());
+            ObjectMapper mapper = new ObjectMapper();
 
             File file = FileService.createNewSituationsFile();
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, indexedSituation.values());
 
-            System.out.println("asdf printing file: ");
-            FileUtils.printFileToConsole(file);
         } catch (Exception e){
 
             e.printStackTrace();
@@ -133,8 +144,11 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+
             File file = FileService.getExistingSituationsFile();
+
             List<Situation> situations = mapper.readValue(file , mapper.getTypeFactory().constructCollectionType(List.class, Situation.class));
+
             FileUtils.printFileToConsole(file);
 
             return indexList(situations);
@@ -190,18 +204,20 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
     }
 
     private Map<String, Situation> getSituationIndex(){
-        System.out.println("asdff ------getSituationIndex-----------------------");
 
         Map<String,Situation> result = loadFromFile();
 
+        System.out.println("asdfff loading Situation index");
         if (result == null || result.size() == 0) {
 
-            System.out.println("asdff no data loaded create default situations" );
-            result = loadDefault();
-            saveToFile(result);
+            System.out.println("asdfff loading default");
+           result = loadDefault();
+           saveToFile(result);
+
+        }else{
+            System.out.println("asdfff loaded from file");
 
         }
-        System.out.println("asdff result.size() = " + result.size());
 
         return result;
 

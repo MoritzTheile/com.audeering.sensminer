@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
+import com.audeering.sensminer.model.situation.SituationCRUDService;
 import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
@@ -68,7 +69,7 @@ public class SensMinerService extends Service {
     private Record getNewRecord() {
         Record record = new Record();
         record.setStartTime(System.currentTimeMillis());
-
+        record.setSituation(SituationCRUDService.instance().getLastSelectedSituation());
         return record;
     }
 
