@@ -16,6 +16,8 @@ import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SensMinerService extends Service {
     private static final String TAG = SensMinerService.class.getName();
@@ -32,27 +34,36 @@ public class SensMinerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand: " + intent.getAction());
         if(Intent.ACTION_RUN.equals(intent.getAction())) {
-            startNotification();
-            setIsRunning(true);
-            record = RecordCRUDService.instance().create(getNewRecord());
-            startAudioService();
-            startLocationService();
+            start();
             return START_STICKY;
         } else if (Intent.ACTION_DELETE.equals(intent.getAction())) {
-            stopAudioService();
-            stopLocationService();
-            {
-                record.setEndTime(System.currentTimeMillis());
-                RecordCRUDService.instance().update(record);
-                record = null;
-            }
-            setIsRunning(false);
-            stopForeground(true);
-            stopSelf();
+            stop();
             return START_NOT_STICKY;
         }
         return START_NOT_STICKY;
     }
+
+    private void stop() {
+        stopAudioService();
+        stopLocationService();
+        {
+            record.setEndTime(System.currentTimeMillis());
+            RecordCRUDService.instance().update(record);
+            record = null;
+        }
+        setIsRunning(false);
+        stopForeground(true);
+        stopSelf();
+    }
+
+    private void start() {
+        startNotification();
+        setIsRunning(true);
+        record = RecordCRUDService.instance().create(getNewRecord());
+        startAudioService();
+        startLocationService();
+    }
+
 
     private Record getNewRecord() {
         Record record = new Record();
@@ -68,6 +79,7 @@ public class SensMinerService extends Service {
     private void startLocationService() {
         LocationSensor.startRecording(this, record);
     }
+
 
     private void stopAudioService() {
         AudioSensor.stopRecording();

@@ -19,11 +19,7 @@ public class Record extends AbstrDTO {
 	
 	private Situation situation;
 	
-	private AccelerationTrack accelerationTrack;
-	
-	private AudioTrack audioTrack;
-	
-	
+
 	public long getStartTime() {
 		return startTime;
 	}
@@ -42,18 +38,5 @@ public class Record extends AbstrDTO {
 	public void setSituation(Situation situation) {
 		this.situation = situation;
 	}
-	public AccelerationTrack getAccelerationTrack() {
-		return accelerationTrack;
-	}
-	public void setAccelerationTrack(AccelerationTrack accelerationTrack) {
-		this.accelerationTrack = accelerationTrack;
-	}
-	public AudioTrack getAudioTrack() {
-		return audioTrack;
-	}
-	public void setAudioTrack(AudioTrack audioTrack) {
-		this.audioTrack = audioTrack;
-	}
-	
-	
+
 }

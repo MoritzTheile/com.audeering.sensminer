@@ -33,6 +33,8 @@ import com.audeering.sensminer.model.situation.view.SituationBoxView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
@@ -119,7 +121,28 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         Intent serviceIntent = new Intent(this, SensMinerService.class);
         serviceIntent.setAction(Intent.ACTION_RUN);
         startService(serviceIntent);
+        startTimer();
     }
+
+    private void startTimer() {
+
+        Configuration configuration = ConfigurationCRUDService.instance().get(null);
+
+        Integer recordDurationInSecs = configuration.getRecordDurations().get(configuration.getRecordDuration());
+
+        if(recordDurationInSecs == null){
+            recordDurationInSecs = Integer.MAX_VALUE;
+        }
+
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stopRecording();
+            }
+        }, recordDurationInSecs*1000);
+    }
+
 
     private void setupRecordDurationSpinner() {
 
