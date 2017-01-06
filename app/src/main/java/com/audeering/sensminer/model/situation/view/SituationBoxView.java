@@ -52,18 +52,6 @@ public class SituationBoxView extends LinearLayout {
 
         configuration = ConfigurationCRUDService.instance().fetchList(null, null).iterator().next();
 
-        if(configuration.getSelectedSituation() == null){
-
-            final DTOFetchList<Situation> situations = SituationCRUDService.instance().fetchList(new Page(), new FetchQuery());
-
-            if(situations.size()>0) {
-                //having any situation as default:
-                configuration.setSelectedSituation(situations.get(0));
-                ConfigurationCRUDService.instance().update(configuration);
-            }
-
-        }
-
     }
 
     public void render(){
@@ -71,13 +59,16 @@ public class SituationBoxView extends LinearLayout {
         { // rendering the chooser
 
             Spinner spinner = (Spinner) findViewById(R.id.situationSpinner);
+
+           // spinner.removeAllViews();
+
             final DTOFetchList<Situation> situations = SituationCRUDService.instance().fetchList(new Page(), new FetchQuery());
 
             final SituationArrayAdapter situationArrayAdapter = new SituationArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, situations);
 
             spinner.setAdapter(situationArrayAdapter);
 
-            spinner.setSelection(situationArrayAdapter.getPosition(configuration.getSelectedSituation()));
+            spinner.setSelection(situationArrayAdapter.getPosition(SituationCRUDService.instance().getLastSelectedSituation()));
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -85,7 +76,7 @@ public class SituationBoxView extends LinearLayout {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                     Toast.makeText(getContext(), "Item " + situationArrayAdapter.getItem(i).getName() + " clicked", Toast.LENGTH_LONG).show();
-                    configuration.setSelectedSituation(situationArrayAdapter.getItem(i));
+                    SituationCRUDService.instance().setLastSelectedSituation(situationArrayAdapter.getItem(i));
                     renderSituationForm();
                 }
 
@@ -110,7 +101,7 @@ public class SituationBoxView extends LinearLayout {
 
         situationFormSlot.addView(situationFormView);
 
-        situationFormView.bind(configuration.getSelectedSituation());
+        situationFormView.bind(SituationCRUDService.instance().getLastSelectedSituation());
 
     }
 
@@ -125,6 +116,36 @@ public class SituationBoxView extends LinearLayout {
                 deleteCurrentSituation();
             }
         });
+
+        findViewById(R.id.situationCreate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createSituation();
+            }
+        });
+
+    }
+
+    private void createSituation() {
+
+        Situation currentSituation = SituationCRUDService.instance().getLastSelectedSituation();
+
+        Situation newSituation = new Situation();
+
+        newSituation = SituationCRUDService.instance().create(newSituation);
+
+        newSituation.setName("new Situation");
+
+        newSituation.setMobileStorage(currentSituation.getMobileStorage());
+        newSituation.setEnvironment(currentSituation.getEnvironment());
+        newSituation.setAuxiliary(currentSituation.getAuxiliary());
+        newSituation.setActivity(currentSituation.getActivity());
+
+        SituationCRUDService.instance().update(newSituation);
+
+        SituationCRUDService.instance().setLastSelectedSituation(newSituation);
+
+        render();
     }
 
     private void deleteCurrentSituation() {
@@ -148,7 +169,10 @@ public class SituationBoxView extends LinearLayout {
     }
 
     private void deleteExecute() {
-        Toast.makeText(getContext(), "deleted...", Toast.LENGTH_SHORT).show();
+
+        SituationCRUDService.instance().delete(SituationCRUDService.instance().getLastSelectedSituation().getId());
+        render();
+
     }
 
 

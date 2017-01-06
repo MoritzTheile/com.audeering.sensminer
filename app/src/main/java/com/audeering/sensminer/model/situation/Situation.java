@@ -3,7 +3,7 @@ package com.audeering.sensminer.model.situation;
 
 import com.audeering.sensminer.model.abstr.AbstrDTO;
 
-public class Situation extends AbstrDTO {
+public class Situation extends AbstrDTO implements Comparable<Situation> {
 	
 	private long lastUsageTimestamp;
 
@@ -63,5 +63,18 @@ public class Situation extends AbstrDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public int compareTo(Situation situation) {
+		Long timestamp1 = new Long(this.getLastUsageTimestamp());
+		if(timestamp1 == null){
+			timestamp1 = 0L;
+		}
+		Long timestamp2 = new Long(situation.getLastUsageTimestamp());
+		if(timestamp2 == null){
+			timestamp2 = 0L;
+		}
+		return timestamp2.compareTo(timestamp1) ;
 	}
 }

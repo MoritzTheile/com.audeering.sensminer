@@ -76,10 +76,4 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-    <ImageView android:layout_marginTop="16dp"
-        android:layout_gravity="end"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_add_circle_32dp"/>
 </com.audeering.sensminer.model.situation.view.SituationFormView>

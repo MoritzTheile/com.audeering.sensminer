@@ -8,6 +8,8 @@ import com.audeering.sensminer.model.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,8 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
         fetchList.addAll(situationIndex.values());
 
+        Collections.sort(fetchList);
+
         return fetchList;
 
     }
@@ -43,6 +47,27 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         return getSituationIndex().get(dtoId);
 
     }
+
+
+    public Situation getLastSelectedSituation() {
+
+        DTOFetchList<Situation> fetchList = fetchList(new Page(), new FetchQuery());
+
+        if(fetchList.size() == 0){
+            return null;
+        }
+
+        Collections.sort(fetchList);
+
+        return fetchList.get(0);
+
+    }
+
+    public void setLastSelectedSituation(Situation situation){
+        situation.setLastUsageTimestamp(System.currentTimeMillis());
+        update(situation);
+    }
+
 
     @Override
     public void update(Situation dto) {

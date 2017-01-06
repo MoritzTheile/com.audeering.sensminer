@@ -59,8 +59,6 @@ public class SituationFormView extends LinearLayout {
                 @Override
                 public void onItemSelected(AdapterView adapterView, View view, int i, long l) {
 
-                    Toast.makeText(getContext(), "Item " + arrayAdapter.getItem(i) + " clicked", Toast.LENGTH_LONG).show();
-
                     situation.setActivity((String) arrayAdapter.getItem(i));
                     SituationCRUDService.instance().update(situation);
 
@@ -90,8 +88,6 @@ public class SituationFormView extends LinearLayout {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView adapterView, View view, int i, long l) {
-
-                    Toast.makeText(getContext(), "Item " + arrayAdapter.getItem(i) + " clicked", Toast.LENGTH_LONG).show();
 
                     situation.setMobileStorage((String) arrayAdapter.getItem(i));
                     SituationCRUDService.instance().update(situation);
@@ -123,9 +119,7 @@ public class SituationFormView extends LinearLayout {
                 @Override
                 public void onItemSelected(AdapterView adapterView, View view, int i, long l) {
 
-                    Toast.makeText(getContext(), "Item " + arrayAdapter.getItem(i) + " clicked", Toast.LENGTH_LONG).show();
-
-                    situation.setEnvironment((String) arrayAdapter.getItem(i));
+                  situation.setEnvironment((String) arrayAdapter.getItem(i));
                     SituationCRUDService.instance().update(situation);
 
                 }
@@ -158,8 +152,6 @@ public class SituationFormView extends LinearLayout {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView adapterView, View view, int i, long l) {
-
-                    Toast.makeText(getContext(), "Item " + arrayAdapter.getItem(i) + " clicked", Toast.LENGTH_LONG).show();
 
                     situation.setAuxiliary((String) arrayAdapter.getItem(i));
                     SituationCRUDService.instance().update(situation);

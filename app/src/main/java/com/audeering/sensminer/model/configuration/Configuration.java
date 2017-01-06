@@ -23,11 +23,6 @@ public class Configuration extends AbstrDTO{
 	public static enum TRACKTYPE {AUDIO, ACCELEROMETER, LOCATION};
 
 	private String recordDuration;
-	/**
-	 * Die vom Benutzer aktuell gewahlte Situation.
-	 */
-	private Situation selectedSituation;
-
 
 	/**
 	 * Diese Werte können als Auxiliary gewahlt werden.
@@ -53,15 +48,6 @@ public class Configuration extends AbstrDTO{
 
 	private AudioTrackConf audioTrackConf = new AudioTrackConf();
 	private AccelerationTrackConf accelerationTrackConf = new AccelerationTrackConf();
-
-
-	public Situation getSelectedSituation() {
-		return selectedSituation;
-	}
-
-	public void setSelectedSituation(Situation selectedSituation) {
-		this.selectedSituation = selectedSituation;
-	}
 
 	public List<String> getSituationAuxiliaryValues() {
 		return situationAuxiliaryValues;
