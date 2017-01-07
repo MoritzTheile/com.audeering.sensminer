@@ -1,18 +1,23 @@
 package com.audeering.sensminer.model.record.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.audeering.sensminer.R;
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.record.Record;
+import com.audeering.sensminer.model.record.RecordCRUDService;
 import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.situation.SituationCRUDService;
 
@@ -48,7 +53,35 @@ public class RecordView extends LinearLayout {
             titleTv.setText(timestampToString(record.getStartTime()));
         }
 
+        ImageView situationDeleteMe = (ImageView) this.findViewById(R.id.situationDeleteMe);
+        situationDeleteMe.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                deleteRecord(record.getId());
+            }
+        });
     }
+
+    private void deleteRecord(final String recordId) {
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete")
+                .setMessage("Do you really want to delete the Record")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        RecordCRUDService.instance().delete(recordId);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
     private void init(AttributeSet attrs, int defStyle) {
 
         // nothing to do?
