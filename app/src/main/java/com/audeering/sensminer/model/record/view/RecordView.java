@@ -14,6 +14,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.audeering.sensminer.R;
+import com.audeering.sensminer.RecordsActivity;
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.record.Record;
@@ -72,6 +73,8 @@ public class RecordView extends LinearLayout {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                         RecordCRUDService.instance().delete(recordId);
+                        //Hack: this shall be replaced by a clean MVC-Pattern.
+                        RecordView.this.removeAllViews();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
