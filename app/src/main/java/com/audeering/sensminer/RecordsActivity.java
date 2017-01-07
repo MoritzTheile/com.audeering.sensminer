@@ -11,31 +11,39 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.audeering.sensminer.model.abstr.DTOFetchList;
+import com.audeering.sensminer.model.abstr.FetchQuery;
+import com.audeering.sensminer.model.abstr.Page;
+import com.audeering.sensminer.model.record.Record;
+import com.audeering.sensminer.model.record.RecordCRUDService;
+
 
 public class RecordsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setupGui();
-    }
 
-    private void setupGui() {
-        setContentView(R.layout.settings);
-        createSetting("Record1", true, null);
-        createSetting("Record2", false, null);
-        createSetting("Record3", true, null);
-    }
+        setContentView(R.layout.records);
 
-    private void createSetting(String label, boolean defaultOn, CompoundButton.OnCheckedChangeListener listener) {
-        ViewGroup settingsLayout = (ViewGroup) findViewById(R.id.settingsLayout);
-        View setting = LayoutInflater.from(this).inflate(R.layout.switch_preference, settingsLayout, false);
-        TextView titleTv = (TextView) setting.findViewById(R.id.title);
-        titleTv.setText(label);
-        Switch onOffSwitch = (Switch) setting.findViewById(R.id.onOffswitch);
-        onOffSwitch.setChecked(defaultOn);
-        onOffSwitch.setOnCheckedChangeListener(listener);
-        settingsLayout.addView(setting);
+
+        DTOFetchList<Record> records = RecordCRUDService.instance().fetchList(new Page(), new FetchQuery());
+
+        for(Record record : records){
+
+            ViewGroup recordsLayout = (ViewGroup) findViewById(R.id.recordsLayout);
+
+            View setting = LayoutInflater.from(this).inflate(R.layout.record, recordsLayout, false);
+            TextView titleTv = (TextView) setting.findViewById(R.id.rec_startime);
+            titleTv.setText("bibabu");
+
+            recordsLayout.addView(setting);
+
+        }
+
+
+
     }
 
 
