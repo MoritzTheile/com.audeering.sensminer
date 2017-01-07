@@ -5,6 +5,7 @@ import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.FileUtils;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -128,6 +129,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.createNewSituationsFile();
 
@@ -144,6 +146,7 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.getExistingSituationsFile();
 

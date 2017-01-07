@@ -7,6 +7,7 @@ import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.situation.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -82,6 +83,7 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.createNewTrackConfFile(abstrTrackConf.getTrackType());
 
@@ -100,6 +102,8 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
             File file = FileService.getExistingTrackConfFile(tracktype);
             AbstrTrackConf loadedObject = mapper.readValue(file, AbstrTrackConf.class);
 

@@ -5,6 +5,7 @@ import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.FileUtils;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -112,6 +113,7 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
 
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.createNewConfigurationFile();
 
@@ -129,6 +131,8 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
         try {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
             File file = FileService.getExistingConfigurationFile();
             Configuration configuration = mapper.readValue(file, Configuration.class);
             FileUtils.printFileToConsole(file);
