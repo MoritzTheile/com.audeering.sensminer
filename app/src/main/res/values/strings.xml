@@ -82,6 +82,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="track_settings">Track Settings</string>
+    <string name="record_list">Records</string>
     <string name="audio_track">Audio Track</string>
     <string name="stop_recording">Stop Recording</string>
 </resources>

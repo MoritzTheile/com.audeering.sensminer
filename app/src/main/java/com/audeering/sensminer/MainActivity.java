@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
-import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.situation.view.SituationBoxView;
 
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
     private static final String TAG = MainActivity.class.getName();
     private SensMinerService mService;
     private TextView startStopButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         setSupportActionBar(toolbar);
         
         setupGui();
-
 
     }
 
@@ -197,7 +196,10 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
                 startActivity(settingsIntent);
                 return true;
             case R.id.action_records:
-                Toast.makeText(MainActivity.this, "action_records...", Toast.LENGTH_SHORT).show();
+
+                Intent recordsIntent = new Intent(this, RecordsActivity.class);
+                startActivity(recordsIntent);
+
                 return true;
         }
 
