@@ -10,9 +10,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 import com.audeering.sensminer.model.situation.SituationCRUDService;
+import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
 import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
@@ -87,7 +89,11 @@ public class SensMinerService extends Service {
     }
 
     private void startAudioService() {
-        AudioSensor.startRecording(record);
+
+        if(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name()).isEnabled()){
+           AudioSensor.startRecording(record);
+        }
+
     }
 
     private void setIsRunning(boolean b) {

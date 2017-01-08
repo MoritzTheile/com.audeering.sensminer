@@ -89,7 +89,7 @@ public class AudioSensor {
         long totalAudioLen = 0;
         long totalDataLen = totalAudioLen + 36;
         long longSampleRate = SAMPLE_RATE;
-        int channels = 1;
+        int channels = 2;
         long byteRate = RECORDER_BPP * SAMPLE_RATE * channels/8;
 
         byte[] data = new byte[BUFSIZE];
