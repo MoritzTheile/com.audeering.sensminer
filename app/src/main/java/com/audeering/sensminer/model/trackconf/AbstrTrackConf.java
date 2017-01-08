@@ -18,5 +18,8 @@ public abstract class AbstrTrackConf extends AbstrDTO{
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
+	@JsonIgnore
+	public abstract boolean isAvailable();
+
 }

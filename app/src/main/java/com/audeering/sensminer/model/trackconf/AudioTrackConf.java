@@ -11,4 +11,9 @@ public class AudioTrackConf extends AbstrTrackConf{
 		return TRACKTYPE.AUDIO;
 	}
 
+	@Override
+	public boolean isAvailable() {
+		return true;
+	}
+
 }

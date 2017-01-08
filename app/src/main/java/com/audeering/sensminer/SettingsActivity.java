@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
+import com.audeering.sensminer.model.situation.SituationCRUDService;
 import com.audeering.sensminer.model.trackconf.AbstrTrackConf;
 import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
 
@@ -53,13 +55,20 @@ public class SettingsActivity extends AppCompatActivity {
         View setting = LayoutInflater.from(this).inflate(R.layout.switch_preference, settingsLayout, false);
         TextView titleTv = (TextView) setting.findViewById(R.id.title);
         titleTv.setText(abstrTrackConf.getTrackType().name().toLowerCase());
-        Switch onOffSwitch = (Switch) setting.findViewById(R.id.onOffswitch);
+        final Switch onOffSwitch = (Switch) setting.findViewById(R.id.onOffswitch);
         onOffSwitch.setChecked(abstrTrackConf.isEnabled());
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                abstrTrackConf.setEnabled(isChecked);
-                TrackConfCRUDService.instance().update(abstrTrackConf);
+                if(isChecked && !abstrTrackConf.isAvailable()){
+
+                    Toast.makeText(SettingsActivity.this, "Track not available yet", Toast.LENGTH_LONG).show();
+                    onOffSwitch.setChecked(false);
+
+                }else {
+                    abstrTrackConf.setEnabled(isChecked);
+                    TrackConfCRUDService.instance().update(abstrTrackConf);
+                }
             }
         });
         settingsLayout.addView(setting);

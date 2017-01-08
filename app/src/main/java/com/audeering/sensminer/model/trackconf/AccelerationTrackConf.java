@@ -10,4 +10,9 @@ public class AccelerationTrackConf extends AbstrTrackConf{
 		return TRACKTYPE.ACCELEROMETER;
 	}
 
+	@Override
+	public boolean isAvailable() {
+		return false;
+	}
+
 }

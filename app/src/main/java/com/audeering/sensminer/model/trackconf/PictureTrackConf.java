@@ -2,17 +2,17 @@ package com.audeering.sensminer.model.trackconf;
 
 import com.audeering.sensminer.model.configuration.Configuration.TRACKTYPE;
 
-public class LocationTrackConf extends AbstrTrackConf{
+public class PictureTrackConf extends AbstrTrackConf{
 
 	
 	@Override
 	public TRACKTYPE getTrackType() {
-		return TRACKTYPE.LOCATION;
+		return TRACKTYPE.PICTURE;
 	}
 
 	@Override
 	public boolean isAvailable() {
-		return true;
+		return false;
 	}
 
 }

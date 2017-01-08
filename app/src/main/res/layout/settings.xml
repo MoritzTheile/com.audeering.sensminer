@@ -6,7 +6,7 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:showDividers="middle" android:divider="@android:drawable/divider_horizontal_dim_dark">
-        <TextView android:text="@string/record_list"
+        <TextView android:text="@string/track_settings"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:padding="8dp"

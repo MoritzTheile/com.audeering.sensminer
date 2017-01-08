@@ -20,7 +20,7 @@ public class Configuration extends AbstrDTO{
 	 * Diese Enumeration benennt alle dem System bekannten Tracktypen.
 	 * Wird ein neuer Track in die App aufgenommen muss der entsprechende Typ hier ergänzt werden.
 	 */
-	public static enum TRACKTYPE {AUDIO, ACCELEROMETER, LOCATION};
+	public static enum TRACKTYPE {AUDIO, ACCELEROMETER, LOCATION, PICTURE, MAGNETIC, ACTIVITY, ILLUMINATION, GYRO};
 
 	private String recordDuration;
 

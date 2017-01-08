@@ -52,8 +52,17 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
                 abstrTrackConf = new AudioTrackConf();
             }else  if(Configuration.TRACKTYPE.LOCATION.equals(tracktype)){
                 abstrTrackConf = new LocationTrackConf();
+            }else  if(Configuration.TRACKTYPE.PICTURE.equals(tracktype)){
+                abstrTrackConf = new PictureTrackConf();
+            }else  if(Configuration.TRACKTYPE.MAGNETIC.equals(tracktype)){
+                abstrTrackConf = new MagneticTrackConf();
+            }else  if(Configuration.TRACKTYPE.ACTIVITY.equals(tracktype)){
+                abstrTrackConf = new ActivityTrackConf();
+            }else  if(Configuration.TRACKTYPE.ILLUMINATION.equals(tracktype)){
+                abstrTrackConf = new IlluminationTrackConf();
+            }else  if(Configuration.TRACKTYPE.GYRO.equals(tracktype)){
+                abstrTrackConf = new GyroTrackConf();
             }
-
             saveToFile(abstrTrackConf);
 
         }
@@ -133,6 +142,22 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
         if(Configuration.TRACKTYPE.LOCATION.equals(tracktype)){
             return LocationTrackConf.class;
         }
+        if(Configuration.TRACKTYPE.PICTURE.equals(tracktype)){
+            return PictureTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.MAGNETIC.equals(tracktype)){
+            return MagneticTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.ACTIVITY.equals(tracktype)){
+            return ActivityTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.ILLUMINATION.equals(tracktype)){
+            return IlluminationTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.GYRO.equals(tracktype)){
+            return GyroTrackConf.class;
+        }
+
         return null;
     }
 

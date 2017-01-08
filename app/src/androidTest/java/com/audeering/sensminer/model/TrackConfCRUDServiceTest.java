@@ -46,19 +46,27 @@ public class TrackConfCRUDServiceTest {
         }
 
         AbstrTrackConf accelerationTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.ACCELEROMETER.name());
-        AbstrTrackConf audioTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
-        AbstrTrackConf locationTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.LOCATION.name());
+        accelerationTrackConf.setEnabled(true);
+        TrackConfCRUDService.instance().update(accelerationTrackConf);
 
-        assertTrue(accelerationTrackConf.isEnabled());
-        assertTrue(audioTrackConf.isEnabled());
-        assertTrue(locationTrackConf.isEnabled());
+        AbstrTrackConf audioTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
+        audioTrackConf.setEnabled(true);
+        TrackConfCRUDService.instance().update(audioTrackConf);
+
+        AbstrTrackConf locationTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.LOCATION.name());
+        locationTrackConf.setEnabled(true);
+        TrackConfCRUDService.instance().update(locationTrackConf);
+
+        assertTrue(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.ACCELEROMETER.name()).isEnabled());
+        assertTrue(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name()).isEnabled());
+        assertTrue(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.LOCATION.name()).isEnabled());
 
         // TESTING update
 
         audioTrackConf.setEnabled(false);
         TrackConfCRUDService.instance().update(audioTrackConf);
         AbstrTrackConf audioTrackConf_reloaded = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
-        assertTrue(!audioTrackConf.isEnabled());
+        assertTrue(!audioTrackConf_reloaded.isEnabled());
 
     }
 
