@@ -6,8 +6,10 @@ import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.configuration.Configuration;
+import com.audeering.sensminer.model.record.track.AccelerationTrack;
 import com.audeering.sensminer.model.situation.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -63,6 +65,7 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
     @Override
     public void update(AbstrTrackConf dto) {
 
+        System.out.println("saving to file abstrTrackConf " +dto.getTrackType()+ " switchOn = "+dto.isEnabled());
         saveToFile(dto);
 
    }
@@ -105,17 +108,31 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.getExistingTrackConfFile(tracktype);
-            AbstrTrackConf loadedObject = mapper.readValue(file, AbstrTrackConf.class);
+            AbstrTrackConf loadedObject = (AbstrTrackConf) mapper.readValue(file, getClazz(tracktype));
 
             return loadedObject;
 
         }catch(Exception e ) {
 
-            System.out.println("Exception: " + e.getMessage() );
+            System.out.println( "Exception: " + e.getMessage() );
             e.printStackTrace();
 
         }
 
+        return null;
+
+    }
+
+    private static Class<?> getClazz(Configuration.TRACKTYPE tracktype){
+        if(Configuration.TRACKTYPE.ACCELEROMETER.equals(tracktype)){
+            return AccelerationTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.AUDIO.equals(tracktype)){
+            return AudioTrackConf.class;
+        }
+        if(Configuration.TRACKTYPE.LOCATION.equals(tracktype)){
+            return LocationTrackConf.class;
+        }
         return null;
     }
 
@@ -130,4 +147,6 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
         return instance;
     }
 
+
 }
+

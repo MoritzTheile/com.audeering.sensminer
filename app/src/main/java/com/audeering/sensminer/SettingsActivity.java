@@ -11,6 +11,11 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.audeering.sensminer.model.abstr.FetchQuery;
+import com.audeering.sensminer.model.abstr.Page;
+import com.audeering.sensminer.model.trackconf.AbstrTrackConf;
+import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -31,22 +36,35 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupGui() {
+
         setContentView(R.layout.settings);
-        createSetting("Title", true, null);
-        createSetting("Title2", false, null);
-        createSetting("Title3", true, null);
+
+        for(AbstrTrackConf abstrTrackConf : TrackConfCRUDService.instance().fetchList(new Page(), new FetchQuery())){
+
+            createSetting(abstrTrackConf);
+
+        }
+
     }
 
-    private void createSetting(String label, boolean defaultOn, CompoundButton.OnCheckedChangeListener listener) {
+    private void createSetting(final AbstrTrackConf abstrTrackConf){
+
         ViewGroup settingsLayout = (ViewGroup) findViewById(R.id.settingsLayout);
         View setting = LayoutInflater.from(this).inflate(R.layout.switch_preference, settingsLayout, false);
         TextView titleTv = (TextView) setting.findViewById(R.id.title);
-        titleTv.setText(label);
+        titleTv.setText(abstrTrackConf.getTrackType().name().toLowerCase());
         Switch onOffSwitch = (Switch) setting.findViewById(R.id.onOffswitch);
-        onOffSwitch.setChecked(defaultOn);
-        onOffSwitch.setOnCheckedChangeListener(listener);
+        onOffSwitch.setChecked(abstrTrackConf.isEnabled());
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                abstrTrackConf.setEnabled(isChecked);
+                TrackConfCRUDService.instance().update(abstrTrackConf);
+            }
+        });
         settingsLayout.addView(setting);
-    }
+
+   }
 
 
 }
