@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -19,8 +18,6 @@ import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SensMinerService extends Service {
     private static final String TAG = SensMinerService.class.getName();

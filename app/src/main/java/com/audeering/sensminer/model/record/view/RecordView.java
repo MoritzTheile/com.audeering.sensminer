@@ -51,7 +51,7 @@ public class RecordView extends LinearLayout {
         if(record == null  ){
             titleTv.setText("something went wrong");
         }else{
-            titleTv.setText(timestampToString(record.getStartTime()) + " (" + lengthLabel(record.getStartTime(), record.getEndTime()) + ")");
+            titleTv.setText(getName(record) + "\n" + timestampToString(record.getStartTime()) + " (" + lengthLabel(record.getStartTime(), record.getEndTime()) + ")");
         }
 
         ImageView situationDeleteMe = (ImageView) this.findViewById(R.id.situationDeleteMe);
@@ -61,6 +61,13 @@ public class RecordView extends LinearLayout {
                 deleteRecord(record.getId());
             }
         });
+    }
+
+    private String getName(Record record) {
+        if(record.getSituation()==null){
+            return "no situation available";
+        }
+        return record.getSituation().getName();
     }
 
 

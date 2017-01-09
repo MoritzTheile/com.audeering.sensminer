@@ -9,7 +9,11 @@ import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.record.FileService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
+import com.audeering.sensminer.model.record.track.AudioTrack;
+import com.audeering.sensminer.model.trackconf.AudioTrackConf;
+import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,11 +24,13 @@ import java.io.IOException;
  */
 
 public class AudioSensor {
-    private static final int SAMPLE_RATE = 44100;
-    private static final int RECORDER_BPP = 16;
+
+    private static int SAMPLE_RATE = 44100;
+    private static int RECORDER_BPP = 16;
+    private static int CHANNELS = 2;
+
     private static final int BUFSIZE = 8 * 2048;
     private static final String TAG = AudioSensor.class.getName();
-    private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static AudioRecord mAudioRecorder;
     private static boolean running;
     private static String mFileName;
@@ -34,9 +40,25 @@ public class AudioSensor {
     }
 
     public static void startRecording(Record record) {
+
+        {// init settings
+            AudioTrackConf audioTrackConf = (AudioTrackConf)TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
+            if(audioTrackConf.getSampleRateInHz()!=null){
+                SAMPLE_RATE = audioTrackConf.getSampleRateInHz();
+            }
+            if(audioTrackConf.getRecorderBPP()!=null){
+                RECORDER_BPP = audioTrackConf.getRecorderBPP();
+            }
+            if(audioTrackConf.getNumberOfChannels()!=null){
+                CHANNELS = audioTrackConf.getNumberOfChannels();
+            }
+
+        }
+
         try {
-            mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.AUDIO)+"/audio.pcm";
+            mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.AUDIO)+"/audio";
             final FileOutputStream fos = new FileOutputStream(mFileName);
+            int CHANNEL_CONFIG = getChannelConfig(CHANNELS);
             int bufSize = 8 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT);
             Log.i(TAG, "startRecording: bufsize = " + bufSize);
             mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT, bufSize);
@@ -76,11 +98,25 @@ public class AudioSensor {
 
                     copyWaveFile(mFileName, mFileName+".wav");
 
+                    new File(mFileName).delete();
+
                 }
             }).start();
         } catch (Exception e) {
             Log.e(TAG, "startRecording: ", e);
         }
+    }
+
+    private static int getChannelConfig(int channels){
+
+            if(channels==1){
+                return AudioFormat.CHANNEL_IN_MONO;
+            }
+            if(channels==2){
+                return AudioFormat.CHANNEL_IN_STEREO;
+            }
+
+        return -1;
     }
 
     private static void copyWaveFile(String inFilename,String outFilename){
@@ -89,7 +125,7 @@ public class AudioSensor {
         long totalAudioLen = 0;
         long totalDataLen = totalAudioLen + 36;
         long longSampleRate = SAMPLE_RATE;
-        int channels = 2;
+        int channels = CHANNELS;
         long byteRate = RECORDER_BPP * SAMPLE_RATE * channels/8;
 
         byte[] data = new byte[BUFSIZE];
@@ -158,7 +194,7 @@ public class AudioSensor {
         header[31] = (byte) ((byteRate >> 24) & 0xff);
         header[32] = (byte) (2 * 16 / 8);  // block align
         header[33] = 0;
-        header[34] = RECORDER_BPP;  // bits per sample
+        header[34] = (byte) RECORDER_BPP;  // bits per sample
         header[35] = 0;
         header[36] = 'd';
         header[37] = 'a';

@@ -47,9 +47,19 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
         if (abstrTrackConf == null) {
 
             if(Configuration.TRACKTYPE.ACCELEROMETER.equals(tracktype)){
+
                 abstrTrackConf = new AccelerationTrackConf();
+
             }else  if(Configuration.TRACKTYPE.AUDIO.equals(tracktype)){
-                abstrTrackConf = new AudioTrackConf();
+
+                AudioTrackConf audioTrackConf = new AudioTrackConf();
+
+                audioTrackConf.setNumberOfChannels(2);
+                audioTrackConf.setRecorderBPP(16);
+                audioTrackConf.setSampleRateInHz(44100);
+
+                abstrTrackConf = audioTrackConf;
+
             }else  if(Configuration.TRACKTYPE.LOCATION.equals(tracktype)){
                 abstrTrackConf = new LocationTrackConf();
             }else  if(Configuration.TRACKTYPE.PICTURE.equals(tracktype)){
@@ -117,9 +127,8 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             File file = FileService.getExistingTrackConfFile(tracktype);
-            AbstrTrackConf loadedObject = (AbstrTrackConf) mapper.readValue(file, getClazz(tracktype));
 
-            return loadedObject;
+            return (AbstrTrackConf) mapper.readValue(file, getClazz(tracktype));
 
         }catch(Exception e ) {
 
