@@ -3,11 +3,15 @@ package com.audeering.sensminer.model.situation.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -74,9 +78,11 @@ public class SituationBoxView extends LinearLayout {
 
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    Toast.makeText(getContext(), "Item " + situationArrayAdapter.getItem(i).getName() + " clicked", Toast.LENGTH_LONG).show();
-                    SituationCRUDService.instance().setLastSelectedSituation(situationArrayAdapter.getItem(i).getId());
+                    String id = situationArrayAdapter.getItem(i).getId();
+                    if(SituationCRUDService.instance().getLastSelectedSituation().getId().equals(id)) // no change
+                        return;
+//                    Toast.makeText(getContext(), "Item " + situationArrayAdapter.getItem(i).getName() + " clicked", Toast.LENGTH_LONG).show();
+                    SituationCRUDService.instance().setLastSelectedSituation(id);
                     renderSituationForm();
                 }
 
@@ -117,6 +123,13 @@ public class SituationBoxView extends LinearLayout {
             }
         });
 
+        findViewById(R.id.situationEdit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editCurrentSituation();
+            }
+        });
+
         findViewById(R.id.situationCreate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,32 +139,62 @@ public class SituationBoxView extends LinearLayout {
 
     }
 
-    private void createSituation() {
-
+    private void editCurrentSituation() {
         Situation currentSituation = SituationCRUDService.instance().getLastSelectedSituation();
+        showSituationNameDialog(currentSituation);
+    }
 
+    private void createSituation() {
+        Situation currentSituation = SituationCRUDService.instance().getLastSelectedSituation();
         Situation newSituation = new Situation();
-
         newSituation = SituationCRUDService.instance().create(newSituation);
-
 
         newSituation.setMobileStorage(currentSituation.getMobileStorage());
         newSituation.setEnvironment(currentSituation.getEnvironment());
         newSituation.setAuxiliary(currentSituation.getAuxiliary());
         newSituation.setActivity(currentSituation.getActivity());
+        newSituation.setName(getDefaultName(newSituation));
+        showSituationNameDialog(newSituation);
+    }
 
-        newSituation.setName(
-                firstLetters(newSituation.getActivity()) + "_" +
-                firstLetters(newSituation.getMobileStorage()) + "_" +
-                firstLetters(newSituation.getEnvironment()) + "_" +
-                firstLetters(newSituation.getAuxiliary())
-        );
+    private void showSituationNameDialog(final Situation situation) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Situation Name");
+        View custom = LayoutInflater.from(getContext()).inflate(R.layout.name_input, null);
+        final EditText input = (EditText)custom.findViewById(R.id.input);
+        input.setText(situation.getName());
+        builder.setView(custom);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                createSituationFinalize(situation, String.valueOf(input.getText()));
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
+        input.post(new Runnable() {
+            @Override
+            public void run() {
+                input.requestFocus();
+                input.selectAll();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    }
 
-        SituationCRUDService.instance().update(newSituation);
-
-        SituationCRUDService.instance().setLastSelectedSituation(newSituation.getId());
-
+    private void createSituationFinalize(Situation situation, String name) {
+        situation.setName(name);
+        SituationCRUDService.instance().update(situation);
+        SituationCRUDService.instance().setLastSelectedSituation(situation.getId());
         render();
+    }
+
+    private String getDefaultName(Situation situation) {
+        return firstLetters(situation.getActivity()) + "_" +
+                firstLetters(situation.getMobileStorage()) + "_" +
+                firstLetters(situation.getEnvironment()) + "_" +
+                firstLetters(situation.getAuxiliary());
     }
 
     private String firstLetters(String string) {
