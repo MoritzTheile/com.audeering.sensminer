@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <LinearLayout android:id="@+id/settingsLayout"
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:showDividers="middle" android:divider="@android:drawable/divider_horizontal_dim_dark">
         <TextView android:text="@string/track_settings"
             style="@style/Base.TextAppearance.AppCompat.Large"

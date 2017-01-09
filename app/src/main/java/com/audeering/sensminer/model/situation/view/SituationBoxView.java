@@ -3,21 +3,16 @@ package com.audeering.sensminer.model.situation.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.audeering.sensminer.MainActivity;
 import com.audeering.sensminer.R;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
@@ -26,8 +21,6 @@ import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.situation.SituationCRUDService;
-
-import java.util.List;
 
 /**
  * Created by MoritzTheile on 03.01.2017.
@@ -78,7 +71,10 @@ public class SituationBoxView extends LinearLayout {
 
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    String id = situationArrayAdapter.getItem(i).getId();
+                    Situation item = situationArrayAdapter.getItem(i);
+                    if(item == null)
+                        return;
+                    String id = item.getId();
                     if(SituationCRUDService.instance().getLastSelectedSituation().getId().equals(id)) // no change
                         return;
 //                    Toast.makeText(getContext(), "Item " + situationArrayAdapter.getItem(i).getName() + " clicked", Toast.LENGTH_LONG).show();
@@ -103,7 +99,7 @@ public class SituationBoxView extends LinearLayout {
 
         situationFormSlot.removeAllViews();
 
-        SituationFormView situationFormView = (SituationFormView) LayoutInflater.from(getContext()).inflate(R.layout.situation_form_view, null);
+        SituationFormView situationFormView = (SituationFormView) LayoutInflater.from(getContext()).inflate(R.layout.situation_form_view, situationFormSlot, false);
 
         situationFormSlot.addView(situationFormView);
 

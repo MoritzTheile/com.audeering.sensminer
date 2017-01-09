@@ -2,16 +2,12 @@ package com.audeering.sensminer.model.trackconf;
 
 import android.util.Log;
 
-import com.audeering.sensminer.model.FileUtils;
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.record.track.AccelerationTrack;
-import com.audeering.sensminer.model.situation.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -167,7 +163,7 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
             return GyroTrackConf.class;
         }
 
-        return null;
+        throw new RuntimeException("non supported tracktype "+ tracktype);
     }
 
     //SINGLETON

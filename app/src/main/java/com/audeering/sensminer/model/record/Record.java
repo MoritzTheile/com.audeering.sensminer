@@ -1,8 +1,6 @@
 package com.audeering.sensminer.model.record;
 
 import com.audeering.sensminer.model.abstr.AbstrDTO;
-import com.audeering.sensminer.model.record.track.AccelerationTrack;
-import com.audeering.sensminer.model.record.track.AudioTrack;
 import com.audeering.sensminer.model.situation.Situation;
 
 public class Record extends AbstrDTO {

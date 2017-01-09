@@ -5,8 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
-import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 
@@ -15,7 +13,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**

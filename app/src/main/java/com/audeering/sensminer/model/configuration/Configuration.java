@@ -1,18 +1,13 @@
 package com.audeering.sensminer.model.configuration;
 
 import com.audeering.sensminer.model.abstr.AbstrDTO;
-import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.trackconf.AccelerationTrackConf;
 import com.audeering.sensminer.model.trackconf.AudioTrackConf;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Configuration extends AbstrDTO{
 

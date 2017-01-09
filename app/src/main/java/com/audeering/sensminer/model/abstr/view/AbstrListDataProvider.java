@@ -17,7 +17,7 @@ public abstract class AbstrListDataProvider<T extends AbstrDTO, F extends FetchQ
 	private int startRow = 0;
 	private int pageSize = Integer.MAX_VALUE;
 	private int totalSize = -1;
-	private List<T> data = new ArrayList<T>();
+	private List<T> data = new ArrayList<>();
 
 	public AbstrListDataProvider(F fetchQuery) {
 		this.fetchQuery = fetchQuery;

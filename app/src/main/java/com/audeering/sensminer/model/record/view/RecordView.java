@@ -3,29 +3,14 @@ package com.audeering.sensminer.model.record.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.audeering.sensminer.R;
-import com.audeering.sensminer.RecordsActivity;
-import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
-import com.audeering.sensminer.model.situation.Situation;
-import com.audeering.sensminer.model.situation.SituationCRUDService;
-import com.audeering.sensminer.sensors.AudioSensor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,6 +40,7 @@ public class RecordView extends LinearLayout {
         TextView titleTv = (TextView) this.findViewById(R.id.rec_startime);
         if(record == null  ){
             titleTv.setText("something went wrong");
+            return;
         }else{
             titleTv.setText(getName(record) + "\n" + timestampToString(record.getStartTime()) + " (" + lengthLabel(record.getStartTime(), record.getEndTime()) + ")");
         }

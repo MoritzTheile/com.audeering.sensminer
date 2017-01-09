@@ -13,10 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
-
 /**
  * Created by MoritzTheile on 05.12.2016.
  */

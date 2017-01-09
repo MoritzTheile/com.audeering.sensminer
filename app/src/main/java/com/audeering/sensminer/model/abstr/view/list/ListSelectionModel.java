@@ -7,9 +7,9 @@ import java.util.List;
 
 public class ListSelectionModel<T> {
 
-	private Collection<T> selection = new HashSet<T>();
+	private Collection<T> selection = new HashSet<>();
 
-	private List<SelectionListener<T>> listeners = new ArrayList<SelectionListener<T>>();
+	private List<SelectionListener<T>> listeners = new ArrayList<>();
 
 	public void addListener(SelectionListener<T> listener) {
 		listeners.add(listener);
@@ -55,7 +55,7 @@ public class ListSelectionModel<T> {
 
 	private void callListeners() {
 		for (SelectionListener<T> listener : listeners) {
-			listener.onHasChanged(new ArrayList<T>(selection));
+			listener.onHasChanged(new ArrayList<>(selection));
 		}
 	};
 
@@ -72,7 +72,7 @@ public class ListSelectionModel<T> {
 			}
 		}
 
-		List<T> elementsToSelect = new ArrayList<T>();
+		List<T> elementsToSelect = new ArrayList<>();
 		boolean withinAreaToSelect = false;
 		for (T element : allData) {
 			if (element == first) {

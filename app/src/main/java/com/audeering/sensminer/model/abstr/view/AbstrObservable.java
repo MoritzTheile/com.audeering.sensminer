@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public abstract class AbstrObservable<T> {
 
-	private final Collection<Observer<T>> observers = new ArrayList<Observer<T>>();
+	private final Collection<Observer<T>> observers = new ArrayList<>();
 
 	public void addObserver(Observer<T> observer) {
 
@@ -21,7 +21,7 @@ public abstract class AbstrObservable<T> {
 
 	public void hasChanged() {
 
-		for (Observer<T> listener : new ArrayList<Observer<T>>(observers)) {
+		for (Observer<T> listener : new ArrayList<>(observers)) {
 
 			listener.modelHasChanged(getModel());
 

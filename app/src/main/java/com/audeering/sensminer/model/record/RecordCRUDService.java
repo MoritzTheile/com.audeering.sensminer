@@ -2,13 +2,11 @@ package com.audeering.sensminer.model.record;
 
 import android.util.Log;
 
-import com.audeering.sensminer.model.FileUtils;
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.situation.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

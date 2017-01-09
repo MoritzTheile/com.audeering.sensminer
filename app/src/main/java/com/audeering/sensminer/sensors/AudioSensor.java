@@ -2,24 +2,17 @@ package com.audeering.sensminer.sensors;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.AudioTimestamp;
 import android.media.MediaRecorder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.record.FileService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
-import com.audeering.sensminer.model.record.track.AudioTrack;
-import com.audeering.sensminer.model.trackconf.AudioTrackConf;
-import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -213,8 +206,6 @@ public class AudioSensor {
 
             in.close();
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

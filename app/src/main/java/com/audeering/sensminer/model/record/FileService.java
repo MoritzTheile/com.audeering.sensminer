@@ -79,12 +79,12 @@ public class FileService {
 
         File[] files = directory.listFiles();
 
-        for(int i=0; i<files.length; i++) {
+        for (File file : files) {
 
-            if(files[i].isDirectory()) {
-                deleteDirectory(files[i]);
+            if (file.isDirectory()) {
+                deleteDirectory(file);
             } else {
-                files[i].delete();
+                file.delete();
             }
 
         }

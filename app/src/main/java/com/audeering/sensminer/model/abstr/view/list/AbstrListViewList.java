@@ -19,7 +19,7 @@ public abstract class AbstrListViewList<T extends AbstrDTO, F extends FetchQuery
 
 	private final ListSelectionModel<T> selectionModel;
 
-	private final Map<T, View> data2view = new HashMap<T, View>();
+	private final Map<T, View> data2view = new HashMap<>();
 
 	public enum SELECTIONMODE {
 		MULTISELECT, RANGESELECT, SINGLESELECT, DISABLED
@@ -36,7 +36,7 @@ public abstract class AbstrListViewList<T extends AbstrDTO, F extends FetchQuery
 
 		this.dataProvider = dataProvider;
 
-		selectionModel = new ListSelectionModel<T>();
+		selectionModel = new ListSelectionModel<>();
 
 		selectionModel.addListener(new ListSelectionModel.SelectionListener<T>() {
 

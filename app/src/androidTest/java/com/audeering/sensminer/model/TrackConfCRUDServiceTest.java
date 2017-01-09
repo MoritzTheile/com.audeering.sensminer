@@ -6,19 +6,12 @@ import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
 import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.record.track.AbstrTrack;
-import com.audeering.sensminer.model.situation.Situation;
-import com.audeering.sensminer.model.situation.SituationCRUDService;
 import com.audeering.sensminer.model.trackconf.AbstrTrackConf;
-import com.audeering.sensminer.model.trackconf.AccelerationTrackConf;
 import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 

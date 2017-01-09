@@ -8,15 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.audeering.sensminer.model.configuration.Configuration;
-import com.audeering.sensminer.model.record.FileService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Matthias Laabs on 06.12.2016.

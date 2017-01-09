@@ -7,9 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.audeering.sensminer.MainActivity;
 import com.audeering.sensminer.R;
 import com.audeering.sensminer.model.configuration.Configuration;
 import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
@@ -52,7 +50,7 @@ public class SituationFormView extends LinearLayout {
                     break;
                 }
             }
-            final ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
+            final ArrayAdapter arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
             spinner.setAdapter(arrayAdapter);
             spinner.setSelection(selectedIndex);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -82,7 +80,7 @@ public class SituationFormView extends LinearLayout {
                     break;
                 }
             }
-            final ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
+            final ArrayAdapter arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
             spinner.setAdapter(arrayAdapter);
             spinner.setSelection(selectedIndex);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -112,7 +110,7 @@ public class SituationFormView extends LinearLayout {
                     break;
                 }
             }
-            final ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
+            final ArrayAdapter arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
             spinner.setAdapter(arrayAdapter);
             spinner.setSelection(selectedIndex);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -146,7 +144,7 @@ public class SituationFormView extends LinearLayout {
                 }
             }
 
-            final ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
+            final ArrayAdapter arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, values);
             spinner.setAdapter(arrayAdapter);
             spinner.setSelection(selectedIndex);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

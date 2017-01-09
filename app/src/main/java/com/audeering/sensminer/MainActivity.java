@@ -1,10 +1,8 @@
 package com.audeering.sensminer;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -32,8 +30,6 @@ import com.audeering.sensminer.model.situation.view.SituationBoxView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
 
 
         final FrameLayout situationBoxSlot = (FrameLayout) findViewById(R.id.situationBoxSlot);
-        SituationBoxView situationBoxView = (SituationBoxView) LayoutInflater.from(this).inflate(R.layout.situation_box_view, null);
+        SituationBoxView situationBoxView = (SituationBoxView) LayoutInflater.from(this).inflate(R.layout.situation_box_view, situationBoxSlot, false);
         situationBoxSlot.addView(situationBoxView);
         situationBoxView.render();
 

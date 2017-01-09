@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.audeering.sensminer.model.abstr.FetchQuery;
 import com.audeering.sensminer.model.abstr.Page;
-import com.audeering.sensminer.model.situation.SituationCRUDService;
 import com.audeering.sensminer.model.trackconf.AbstrTrackConf;
 import com.audeering.sensminer.model.trackconf.TrackConfCRUDService;
 

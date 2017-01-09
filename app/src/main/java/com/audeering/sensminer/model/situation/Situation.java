@@ -67,14 +67,8 @@ public class Situation extends AbstrDTO implements Comparable<Situation> {
 
 	@Override
 	public int compareTo(Situation situation) {
-		Long timestamp1 = new Long(this.getLastUsageTimestamp());
-		if(timestamp1 == null){
-			timestamp1 = 0L;
-		}
-		Long timestamp2 = new Long(situation.getLastUsageTimestamp());
-		if(timestamp2 == null){
-			timestamp2 = 0L;
-		}
+		Long timestamp1 = this.getLastUsageTimestamp();
+		Long timestamp2 = situation.getLastUsageTimestamp();
 		return timestamp2.compareTo(timestamp1) ;
 	}
 }
