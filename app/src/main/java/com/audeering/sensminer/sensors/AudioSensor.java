@@ -29,7 +29,6 @@ public class AudioSensor {
     private static int RECORDER_BPP = 16;
     private static int CHANNELS = 2;
 
-    private static final int BUFSIZE = 8 * 2048;
     private static final String TAG = AudioSensor.class.getName();
     private static AudioRecord mAudioRecorder;
     private static boolean running;
@@ -41,7 +40,10 @@ public class AudioSensor {
 
     public static void startRecording(Record record) {
 
-        {// init settings from filesystem
+       /*
+
+       {// init settings from filesystem
+
             AudioTrackConf audioTrackConf = (AudioTrackConf)TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
             if(audioTrackConf.getSampleRateInHz()!=null){
                 SAMPLE_RATE = audioTrackConf.getSampleRateInHz();
@@ -54,26 +56,30 @@ public class AudioSensor {
             }
 
         }
+        */
 
         try {
             mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.AUDIO)+"/audio";
             final FileOutputStream fos = new FileOutputStream(mFileName);
             int CHANNEL_CONFIG = getChannelConfig(CHANNELS);
-            int bufSize = 8 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT);
+            final int bufSize = 16 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT);
             Log.i(TAG, "startRecording: bufsize = " + bufSize);
+            Log.i(TAG, "startRecording: SAMPLE_RATE = " + SAMPLE_RATE);
+            Log.i(TAG, "startRecording: CHANNEL_CONFIG = " + CHANNEL_CONFIG);
             mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT, bufSize);
             int state = mAudioRecorder.getState();
             Log.i(TAG, "startRecording: " + state);
+
             mAudioRecorder.startRecording();
             running = true;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Log.i(TAG, "run: Thread started");
-                    byte[] buf = new byte[BUFSIZE];
+                    byte[] buf = new byte[bufSize];
                     while (running) {
                         try {
-                            int len = mAudioRecorder.read(buf, 0, BUFSIZE);
+                            int len = mAudioRecorder.read(buf, 0, bufSize);
                             if(len > 0) {
                                 fos.write(buf, 0, len);
                                 Log.i(TAG, "run: wrote byte: " + len);
@@ -90,6 +96,7 @@ public class AudioSensor {
                     // cleanup
                     try {
                         mAudioRecorder.stop();
+                        mAudioRecorder.release();
                         fos.flush();
                         fos.close();
                     } catch (Exception e) {
@@ -98,7 +105,7 @@ public class AudioSensor {
 
                     copyWaveFile(mFileName, mFileName+".wav");
 
-                    new File(mFileName).delete();
+                    //new File(mFileName).delete();
 
                 }
             }).start();
@@ -119,7 +126,7 @@ public class AudioSensor {
         return -1;
     }
 
-    private static void copyWaveFile(String inFilename,String outFilename){
+    private static void copyWaveFile(String inFilename, String outFilename){
         FileInputStream in = null;
         FileOutputStream out = null;
         long totalAudioLen = 0;
@@ -128,14 +135,17 @@ public class AudioSensor {
         int channels = CHANNELS;
         long byteRate = RECORDER_BPP * SAMPLE_RATE * channels/8;
 
+        int BUFSIZE = 8 * 2048;
+
+
         byte[] data = new byte[BUFSIZE];
 
         try {
+
             in = new FileInputStream(inFilename);
             out = new FileOutputStream(outFilename);
             totalAudioLen = in.getChannel().size();
             totalDataLen = totalAudioLen + 36;
-
 
             WriteWaveFileHeader(out, totalAudioLen, totalDataLen,
                     longSampleRate, channels, byteRate);

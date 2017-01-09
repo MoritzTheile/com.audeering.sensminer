@@ -63,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        unbindService(mConnection);
+
+    }
+
     private void setupGui() {
 
         setupRecordDurationSpinner();
@@ -190,9 +198,18 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
     }
 
     @Override
-    public void statusChanged(boolean running) {
+    public void statusChanged(final boolean running) {
+
         isServiceRunning = running;
-        startStopButton.setText(getString(running ? R.string.stop_recording : R.string.start_recording));
+
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              startStopButton.setText(getString(running ? R.string.stop_recording : R.string.start_recording));
+                          }
+                      }
+        );
+
     }
 
     private void askForPermissions() {
