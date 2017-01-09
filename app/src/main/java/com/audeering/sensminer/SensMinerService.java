@@ -44,9 +44,9 @@ public class SensMinerService extends Service {
     }
 
     private void stop() {
-        stopAudioService();
-        stopLocationService();
-        {
+        AudioSensor.stopRecording();
+        LocationSensor.stopRecording();
+        if(record != null){
             record.setEndTime(System.currentTimeMillis());
             RecordCRUDService.instance().update(record);
             record = null;
@@ -60,8 +60,12 @@ public class SensMinerService extends Service {
         startNotification();
         setIsRunning(true);
         record = RecordCRUDService.instance().create(getNewRecord());
-        startAudioService();
-        startLocationService();
+        if(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name()).isEnabled()) {
+            AudioSensor.startRecording(record);
+        }
+        if(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.LOCATION.name()).isEnabled()) {
+            LocationSensor.startRecording(this, record);
+        }
     }
 
 
@@ -72,26 +76,7 @@ public class SensMinerService extends Service {
         return record;
     }
 
-    private void stopLocationService() {
-        LocationSensor.stopRecording();
-    }
 
-    private void startLocationService() {
-        LocationSensor.startRecording(this, record);
-    }
-
-
-    private void stopAudioService() {
-        AudioSensor.stopRecording();
-    }
-
-    private void startAudioService() {
-
-        if(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name()).isEnabled()){
-           AudioSensor.startRecording(record);
-        }
-
-    }
 
     private void setIsRunning(boolean b) {
         isRunning = b;
