@@ -3,6 +3,7 @@ package com.audeering.sensminer.model.situation.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,10 +20,12 @@ import java.util.List;
 public class SituationArrayAdapter extends ArrayAdapter<Situation> {
 
     private List<Situation> situations;
+    private int resource;
 
     public SituationArrayAdapter(Context context, int resource, List<Situation> situations) {
         super(context, resource, situations);
         this.situations = situations;
+        this.resource = resource;
     }
 
     @NonNull
@@ -35,7 +38,8 @@ public class SituationArrayAdapter extends ArrayAdapter<Situation> {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        TextView textView = new TextView(getContext());
+        convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
+        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
         textView.setText(situations.get(position).getName());
         return textView;
     }
