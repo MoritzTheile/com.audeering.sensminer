@@ -1,5 +1,7 @@
 package com.audeering.sensminer.model.record;
 
+import android.util.Log;
+
 import com.audeering.sensminer.model.FileUtils;
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
@@ -116,8 +118,7 @@ public class RecordCRUDService implements CRUDService<Record, FetchQuery> {
 
         } catch (Exception e) {
 
-            System.out.println("Exception: " + e.getMessage());
-            e.printStackTrace();
+            Log.e(this.getClass().getName(), "Exception on loading file", e);
 
         }
 

@@ -1,5 +1,7 @@
 package com.audeering.sensminer.model.situation;
 
+import android.util.Log;
+
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
@@ -80,10 +82,6 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
     @Override
     public void update(Situation dto) {
 
-        System.out.println("asdfff Updating situationDTO");
-        System.out.println("asdfff     name = " + dto.getName());
-        System.out.println("asdfff     environment = " + dto.getEnvironment());
-
         Map<String, Situation> situationIndex = getSituationIndex();
 
         if(situationIndex.containsKey(dto.getId())){
@@ -152,13 +150,11 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
             List<Situation> situations = mapper.readValue(file , mapper.getTypeFactory().constructCollectionType(List.class, Situation.class));
 
-            FileUtils.printFileToConsole(file);
-
             return indexList(situations);
 
         }catch(Exception e ) {
-            System.out.println("Exception: " + e.getMessage() );
-            e.printStackTrace();
+
+            Log.e(this.getClass().getName(), "Exception on loading file", e);
 
         }
 
@@ -210,15 +206,10 @@ public class SituationCRUDService implements CRUDService<Situation, FetchQuery> 
 
         Map<String,Situation> result = loadFromFile();
 
-        System.out.println("asdfff loading Situation index");
         if (result == null || result.size() == 0) {
 
-            System.out.println("asdfff loading default");
-           result = loadDefault();
+          result = loadDefault();
            saveToFile(result);
-
-        }else{
-            System.out.println("asdfff loaded from file");
 
         }
 

@@ -1,5 +1,7 @@
 package com.audeering.sensminer.model.trackconf;
 
+import android.util.Log;
+
 import com.audeering.sensminer.model.FileUtils;
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
@@ -84,7 +86,6 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
     @Override
     public void update(AbstrTrackConf dto) {
 
-        System.out.println("saving to file abstrTrackConf " +dto.getTrackType()+ " switchOn = "+dto.isEnabled());
         saveToFile(dto);
 
    }
@@ -132,8 +133,7 @@ public class TrackConfCRUDService implements CRUDService<AbstrTrackConf, FetchQu
 
         }catch(Exception e ) {
 
-            System.out.println( "Exception: " + e.getMessage() );
-            e.printStackTrace();
+            Log.e(this.getClass().getName(), "Exception on loading file", e);
 
         }
 

@@ -1,5 +1,7 @@
 package com.audeering.sensminer.model.configuration;
 
+import android.util.Log;
+
 import com.audeering.sensminer.model.abstr.CRUDService;
 import com.audeering.sensminer.model.abstr.DTOFetchList;
 import com.audeering.sensminer.model.abstr.FetchQuery;
@@ -119,7 +121,6 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, configuration);
 
-             FileUtils.printFileToConsole(file);
         } catch (Exception e){
 
             e.printStackTrace();
@@ -135,14 +136,12 @@ public class ConfigurationCRUDService implements CRUDService<Configuration, Fetc
 
             File file = FileService.getExistingConfigurationFile();
             Configuration configuration = mapper.readValue(file, Configuration.class);
-            FileUtils.printFileToConsole(file);
 
             return configuration;
 
         }catch(Exception e ) {
 
-            System.out.println("Exception: " + e.getMessage() );
-            e.printStackTrace();
+            Log.e(this.getClass().getName(), "Exception on loading file", e);
 
         }
 

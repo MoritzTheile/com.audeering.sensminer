@@ -39,12 +39,6 @@ public class TrackConfCRUDServiceTest {
         // there should be at least one Situation
         assertTrue(threeTrackConfs.size()==3);
 
-        System.out.println("abstrTrackConf printing threeTrackConfs ");
-        for(AbstrTrackConf abstrTrackConf : threeTrackConfs){
-            System.out.println("    abstrTrackConf = " +  abstrTrackConf);
-            System.out.println("    abstrTrackConf.isEnabled() = " +  abstrTrackConf.isEnabled());
-        }
-
         AbstrTrackConf accelerationTrackConf = TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.ACCELEROMETER.name());
         accelerationTrackConf.setEnabled(true);
         TrackConfCRUDService.instance().update(accelerationTrackConf);
