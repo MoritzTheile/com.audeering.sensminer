@@ -3,7 +3,10 @@ package com.audeering.sensminer.model.record.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.audeering.sensminer.R;
 import com.audeering.sensminer.RecordsActivity;
@@ -21,6 +25,7 @@ import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 import com.audeering.sensminer.model.situation.Situation;
 import com.audeering.sensminer.model.situation.SituationCRUDService;
+import com.audeering.sensminer.sensors.AudioSensor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,14 +59,33 @@ public class RecordView extends LinearLayout {
             titleTv.setText(getName(record) + "\n" + timestampToString(record.getStartTime()) + " (" + lengthLabel(record.getStartTime(), record.getEndTime()) + ")");
         }
 
-        ImageView situationDeleteMe = (ImageView) this.findViewById(R.id.situationDeleteMe);
-        situationDeleteMe.setOnClickListener(new OnClickListener(){
+        findViewById(R.id.recordDeleteMe).setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 deleteRecord(record.getId());
             }
         });
+
+//        findViewById(R.id.recordPlayAudio).setOnClickListener(new OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                playAudio(record);
+//            }
+//        });
     }
+
+//    private void playAudio(Record record) {
+//        String audioFile = "file://" + AudioSensor.getFileName(record) + ".wav";
+//        Uri uri = Uri.parse(audioFile);
+//        Log.i("TAG", "playAudio: " + uri);
+//        Intent playIntent = new Intent(Intent.ACTION_VIEW, uri);
+//        playIntent.setType("audio/wav");
+//        try {
+//            getContext().startActivity(playIntent);
+//        } catch (Exception ignore) {
+//            Toast.makeText(getContext(), "No application found to play " + audioFile, Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     private String getName(Record record) {
         if(record.getSituation()==null){
