@@ -51,7 +51,7 @@ public class RecordView extends LinearLayout {
         if(record == null  ){
             titleTv.setText("something went wrong");
         }else{
-            titleTv.setText(timestampToString(record.getStartTime()));
+            titleTv.setText(timestampToString(record.getStartTime()) + " (" + lengthLabel(record.getStartTime(), record.getEndTime()) + ")");
         }
 
         ImageView situationDeleteMe = (ImageView) this.findViewById(R.id.situationDeleteMe);
@@ -63,6 +63,28 @@ public class RecordView extends LinearLayout {
         });
     }
 
+
+    private String lengthLabel(Long startTime, Long endTime) {
+
+        String label = "";
+        if(startTime == null || endTime == null){
+            return label;
+        }
+
+        long seconds = (endTime-startTime)/1000;
+
+        long minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        if(minutes > 0){
+            label += minutes + " min.";
+        }
+
+        label += " " + seconds + " sec.";
+
+
+        return label;
+    }
     private void deleteRecord(final String recordId) {
 
         new AlertDialog.Builder(getContext())
@@ -95,7 +117,7 @@ public class RecordView extends LinearLayout {
         if(timestamp == null){
             return "no start time";
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd.MM.yyyy");
         return sdf.format(new Date(timestamp));
     }
 
