@@ -4,7 +4,10 @@ import com.audeering.sensminer.model.configuration.Configuration.TRACKTYPE;
 
 public class IlluminationTrackConf extends AbstrTrackConf{
 
-	
+	public IlluminationTrackConf(){
+		setEnabled(false);
+	}
+
 	@Override
 	public TRACKTYPE getTrackType() {
 		return TRACKTYPE.ILLUMINATION;
