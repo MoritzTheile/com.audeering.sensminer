@@ -13,6 +13,10 @@ import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Matthias Laabs on 06.12.2016.
@@ -23,10 +27,19 @@ public class LocationSensor {
     private static final float MIN_DIST = 1;
     private static LocationManager locationManager;
     private static final String TAG = LocationSensor.class.getName();
+
     private static LocationListener listener = new LocationListener() {
+
         @Override
         public void onLocationChanged(Location location) {
-            Log.d(TAG, "onLocationChanged() called with: location = [" + location + "]");
+
+            PrintStream printStream = new PrintStream(fos);
+            printStream.print(formatTime(location.getTime())+";"+location.getLatitude()+";"+location.getLongitude()+";"+location.getAccuracy()+"\n");
+        }
+
+        private String formatTime(long time){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
+            return sdf.format(new Date(time));
         }
 
         @Override
@@ -49,11 +62,13 @@ public class LocationSensor {
     @SuppressWarnings("MissingPermission")
     public static void startRecording(Context context, Record record) {
         try {
-            String mFileName = RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.LOCATION)+"/location.csv";;
-            fos = new FileOutputStream(mFileName);
+
+            fos = new FileOutputStream(RecordCRUDService.instance().getDataDir(record, Configuration.TRACKTYPE.LOCATION)+"/location.csv");
 
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, listener);
+
         } catch (Exception e) {
             Log.e(TAG, "startRecording: ", e);
         }

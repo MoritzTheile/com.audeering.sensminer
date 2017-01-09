@@ -23,6 +23,7 @@ public class Record extends AbstrDTO {
 	public long getStartTime() {
 		return startTime;
 	}
+
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}

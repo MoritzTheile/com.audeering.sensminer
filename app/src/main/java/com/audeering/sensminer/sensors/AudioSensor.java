@@ -41,7 +41,7 @@ public class AudioSensor {
 
     public static void startRecording(Record record) {
 
-        {// init settings
+        {// init settings from filesystem
             AudioTrackConf audioTrackConf = (AudioTrackConf)TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.AUDIO.name());
             if(audioTrackConf.getSampleRateInHz()!=null){
                 SAMPLE_RATE = audioTrackConf.getSampleRateInHz();
