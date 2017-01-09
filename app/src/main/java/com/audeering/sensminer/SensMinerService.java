@@ -10,6 +10,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.audeering.sensminer.model.configuration.Configuration;
+import com.audeering.sensminer.model.configuration.ConfigurationCRUDService;
 import com.audeering.sensminer.model.record.Record;
 import com.audeering.sensminer.model.record.RecordCRUDService;
 import com.audeering.sensminer.model.situation.SituationCRUDService;
@@ -18,16 +19,20 @@ import com.audeering.sensminer.sensors.AudioSensor;
 import com.audeering.sensminer.sensors.LocationSensor;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SensMinerService extends Service {
     private static final String TAG = SensMinerService.class.getName();
     // Binder given to clients
     private final LocalBinder mBinder = new LocalBinder();
     private boolean isRunning;
+    private Timer timer;
 
     private Record record;
 
     public SensMinerService() {
+
     }
 
     @Override
@@ -54,6 +59,12 @@ public class SensMinerService extends Service {
         setIsRunning(false);
         stopForeground(true);
         stopSelf();
+
+        if(timer!=null){
+            timer.cancel();
+            timer = null;
+        }
+
     }
 
     private void start() {
@@ -66,6 +77,35 @@ public class SensMinerService extends Service {
         if(TrackConfCRUDService.instance().get(Configuration.TRACKTYPE.LOCATION.name()).isEnabled()) {
             LocationSensor.startRecording(this, record);
         }
+
+        {//setting the timer
+
+            if(timer!=null){
+                timer.cancel();
+                timer = null;
+            }
+
+            Configuration configuration = ConfigurationCRUDService.instance().get(null);
+            Integer recordDurationInSecs = configuration.getRecordDurations().get(configuration.getRecordDuration());
+
+            if(recordDurationInSecs == null){
+                recordDurationInSecs = Integer.MAX_VALUE;
+            }
+
+            timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(isRunning){
+                        stop();
+                    }
+                }
+            }, recordDurationInSecs*1000);
+
+
+        }
+
     }
 
 

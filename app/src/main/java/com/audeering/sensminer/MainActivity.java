@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
     }
 
     private void stopRecording() {
+
         Intent serviceIntent = new Intent(this, SensMinerService.class);
         serviceIntent.setAction(Intent.ACTION_DELETE);
         startService(serviceIntent);
@@ -120,27 +121,9 @@ public class MainActivity extends AppCompatActivity implements OnStatusChangedLi
         Intent serviceIntent = new Intent(this, SensMinerService.class);
         serviceIntent.setAction(Intent.ACTION_RUN);
         startService(serviceIntent);
-        startTimer();
+
     }
 
-    private void startTimer() {
-
-        Configuration configuration = ConfigurationCRUDService.instance().get(null);
-
-        Integer recordDurationInSecs = configuration.getRecordDurations().get(configuration.getRecordDuration());
-
-        if(recordDurationInSecs == null){
-            recordDurationInSecs = Integer.MAX_VALUE;
-        }
-
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                stopRecording();
-            }
-        }, recordDurationInSecs*1000);
-    }
 
 
     private void setupRecordDurationSpinner() {
